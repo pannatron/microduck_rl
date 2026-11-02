@@ -3,7 +3,9 @@
 ต่อยอดจาก [pollen-robotics/microduck_rl](https://github.com/pollen-robotics/microduck_rl) (mjlab / MuJoCo-Warp) โดยย้ายเป็ดไปรันและเทรนบน **[Newton](https://github.com/newton-physics/newton) 1.17** ผ่าน Isaac Lab — ทั้งหมดทดสอบบน GPU 6 GB (RTX 3060 Laptop)
 README เดิมของ Pollen อยู่ที่ [`README.pollen.md`](README.pollen.md) · วิดีโอและ policy ทั้งหมดอยู่ใน [release `course-v1`](https://github.com/pannatron/microduck_rl/releases/tag/course-v1)
 
-![10 lanes of Duck Adventure in Newton](docs/course/adventure_lanes.png)
+[![10 ducks racing Duck Adventure side by side in Newton](docs/course/newton_race.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/adv-newton-race-10-lanes.mp4)
+
+*Duck Adventure บน Newton: 10 เลน 5 policy วิ่งด่านเดียวกันพร้อมกันบน GPU เดียว (คลิกเพื่อดู mp4 เต็ม)*
 
 ## สิ่งที่ทำใหม่บน Newton
 
@@ -17,6 +19,16 @@ README เดิมของ Pollen อยู่ที่ [`README.pollen.md`](R
 | เทียบ sim-to-sim: MuJoCo CPU · MuJoCo-Warp · Newton | `newton_duck.py --pd-kd --sensor-lag --act-delay` | kd ของ PD ต่างกันทำความเร็วต่าง 35% |
 
 ![Newton throughput vs mjlab](docs/course/newton_scale.png)
+
+## วิดีโอ (Newton ViewerGL)
+
+| | |
+|---|---|
+| [![1,024 ducks on one GPU](docs/course/newton_crowd.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/m6-newton-crowd-1024.mp4)<br>**เป็ด 1,024 ตัวบน GPU เดียว** · `newton_duck.py --video` | [![latency DR comparison](docs/course/newton_latency.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/m6-latency-dr-compare.mp4)<br>**Latency DR** · ซ้าย: ไม่มี DR ล้มเมื่อหน่วงเต็ม · ขวา: มี DR เดินต่อได้ |
+| [![velstand finishing the course](docs/course/newton_follow_finish.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/adv-newton-velstand-10mm.mp4)<br>**velstand เข้าเส้นชัย** ด่าน 10 mm · กล้องตาม `--cam follow:4` | [![climb35 falling on 20 mm stairs](docs/course/newton_climb20.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/adv-newton-climb35-20mm.mp4)<br>**climb35 ล้มที่บันได 20 mm** · ยกเท้าได้แค่ ~1 ซม. |
+| [![head tracking while walking](docs/course/newton_head.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/w8-head-tracking.mp4)<br>**หันหัวตามเป้าขณะเดิน** · policy ท่าใหม่ที่เทรนบน Newton | [![10 lanes at the start](docs/course/adventure_lanes.png)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/adv-newton-race-10-lanes.mp4)<br>**ด่าน 10 ชุด = 10 world** · `scene.replicate()` |
+
+วิดีโอเต็มทุกคลิป (รวมฝั่ง MuJoCo ไว้เทียบ) อยู่ใน [release `course-v1`](https://github.com/pannatron/microduck_rl/releases/tag/course-v1)
 
 ## เริ่มรัน
 
@@ -43,8 +55,6 @@ uv run python ~/repos/microduck_rl/newton_port/isaaclab_task/train.py \
 path ในสคริปต์ยังอ้าง `~/repos/microduck_rl` และ `~/IsaacLab` ตรง ๆ — clone ไว้ที่เดียวกันก่อน
 
 ## Duck Adventure
-
-![Follow camera in Newton](docs/course/adventure_follow.png)
 
 ด่านเขียนเป็น MJCF ([`playground/make_adventure.py`](playground/make_adventure.py)) แล้ว `newton_adventure.py` อ่าน geom ทุกชิ้นมาสร้างใน Newton ModelBuilder — ด่านไฟล์เดียวใช้ได้ทั้ง Newton และ MuJoCo CPU
 แต่ละเลนเป็น world แยก กติกาเกม (checkpoint, ล้ม/ตกลาวา → เกิดใหม่) และ autopilot คำนวณเป็น tensor บน GPU
