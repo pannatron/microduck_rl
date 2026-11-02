@@ -1,275 +1,83 @@
-# Microduck RL
+# Microduck RL บน Newton — หลักสูตร 12 สัปดาห์
 
-<img width="2215" height="884" alt="image" src="https://github.com/user-attachments/assets/5db7cc83-b3ce-4f7c-83f0-0572a63baed7" />
+ต่อยอดจาก [pollen-robotics/microduck_rl](https://github.com/pollen-robotics/microduck_rl) (mjlab / MuJoCo-Warp) โดยย้ายเป็ดไปรันและเทรนบน **[Newton](https://github.com/newton-physics/newton) 1.17** ผ่าน Isaac Lab — ทั้งหมดทดสอบบน GPU 6 GB (RTX 3060 Laptop)
+README เดิมของ Pollen อยู่ที่ [`README.pollen.md`](README.pollen.md) · วิดีโอและ policy ทั้งหมดอยู่ใน [release `course-v1`](https://github.com/pannatron/microduck_rl/releases/tag/course-v1)
 
+![10 lanes of Duck Adventure in Newton](docs/course/adventure_lanes.png)
 
-RL training environments for [Microduck](https://github.com/pollen-robotics/microduck) —
-a ~800 g, ~25 cm tall bipedal robot — built on
-[mjlab](https://github.com/mujocolab/mjlab) (MuJoCo Warp) with PPO.
-Policies are trained here at 50 Hz, exported to ONNX, and deployed on the real
-robot by the runtime in [pollen-robotics/microduck](https://github.com/pollen-robotics/microduck).
+## สิ่งที่ทำใหม่บน Newton
 
-<!-- HERO VIDEO — real robot montage: walking, standup, roulade, roller skating.
-     Keep it short (~30 s) and real-robot-first: this is the "why should I care" shot. -->
-
-https://github.com/user-attachments/assets/50c3d537-8db2-4005-9d9c-3472faeec4d0
-
-The repo encodes the full sim2real recipe: [BAM](https://github.com/Rhoban/bam)
-actuator physics, domain randomization, backlash simulation, and the
-reward-design lessons that made it work
-(see [AGENTS.md](AGENTS.md) for the distilled playbook).
-
-## Quickstart
-
-Requires a CUDA GPU (training runs through MuJoCo Warp) and [uv](https://docs.astral.sh/uv/).
-
-> **On ARM boxes (DGX Spark / GB10, Jetson):** `uv sync` pulls ~2 GB of CUDA
-> wheels on first run and uv's default 30 s HTTP timeout can abort mid-download.
-> Export `UV_HTTP_TIMEOUT=600` for the first sync. 
-
-```bash
-git clone https://github.com/pollen-robotics/microduck_rl
-cd microduck_rl
-
-# train the walking policy (uses your GPU; ~1-2 h for a usable gait at 4096 envs)
-uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096
-
-# watch a trained policy in the viewer
-uv run play Mjlab-Velocity-Flat-MicroDuck --wandb-run-path <entity/project/run_id>
-
-# export to ONNX for deployment
-uv run scripts/export.py Mjlab-Velocity-Flat-MicroDuck --wandb-run-path <...>
-uv run publish --onnx output.onnx --repo <user>/microduck-<name> --kind episodic --duration-s 4.0   # share it (see "Publishing a policy")
-
-# drive the exported policy in CPU MuJoCo with the keyboard
-uv run scripts/infer_policy.py --walking output.onnx
-```
-
-Resume from a checkpoint:
-
-```bash
-uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096 \
-    --agent.run-name resume --agent.load-checkpoint model_29999.pt --agent.resume True
-```
-
-No GPU? Add `--hf-jobs` to any train command to run it on Hugging Face Jobs
-instead of locally (see [scripts/hf/README.md](scripts/hf/README.md)).
-
-## Tasks
-
-`uv run list-envs` prints the live registry. Flat/Rough variants exist where noted.
-
-<!-- SHOWCASE GRID — one short GIF per task family (sim or real), 3 per row.
-     Priority order if you only record a few: Velocity, VelStand (fall+recover),
-     Roulade, SitStand, Rollers/Swizzle, BallKick. -->
-
-| Task id | Terrain | Description |
+| งาน | ไฟล์ | ผลที่วัดได้ |
 |---|---|---|
-| `Mjlab-Velocity-{Flat,Rough}-MicroDuck` | flat/rough | **The main task**: walking with velocity commands + head-pose commands |
-| `Mjlab-VelStand-{Flat,Rough}-MicroDuck` | flat/rough | Walking + fall recovery in one policy |
-| `Mjlab-StandUp-{Flat,Rough}-MicroDuck` | flat/rough | Stand up from face-down/face-up/sitting, then hold the stand + body-pose control |
-| `Mjlab-SitStand-{Flat,Rough}-MicroDuck` | flat/rough | Commanded sit ↔ stand in one policy, gently, head commandable |
-| `Mjlab-GroundPick-{Flat,Rough}-MicroDuck` | flat/rough | Crouch and touch the ground with the mouth tip, return to stand |
-| `Mjlab-BallKick-Flat-MicroDuck` | flat | Kick a 70 mm / 15 g ball forward (actor is ball-blind) |
-| `Mjlab-Roulade-Flat-MicroDuck` | flat | Forward roll over the head, land back on the feet |
-| `Mjlab-Velocity-Flat-MicroDuck-Rollers` | flat | Roller-skate velocity tracking (passive wheels under the feet) |
-| `Mjlab-Velocity-Swizzle-MicroDuck` | flat | Classic symmetric swizzle skating |
-| `Mjlab-RollerCrouch-Flat-MicroDuck` | flat | Crouch while gliding on rollers |
-| `Mjlab-RollerSlope-Flat-MicroDuck` | slope | Glide down slopes on rollers |
-| `Mjlab-RollerStandUp-Flat-MicroDuck` | flat | Stand up from the ground onto the wheels |
-| `Mjlab-Spin-Flat-MicroDuck` | flat | Fast spin in place on rollers |
+| รัน policy เป็ดหลายพันตัวพร้อมกัน | [`newton_port/newton_duck.py`](newton_port/newton_duck.py) | 1,024 ตัว ~4,000× เวลาจริง · CUDA graph |
+| เทรนบน Newton (Isaac Lab task) | [`newton_port/isaaclab_task/`](newton_port/isaaclab_task) | 4,096 env 0.74 s/it 1.4 GB (mjlab 3.0 s/it 5 GB) · 16,384 env 176k step/s |
+| Latency DR บน Newton | `LATENCY_DR=1` ใน `microduck_tasks.py` | หน่วงเต็ม: ตัวเดิมล้ม 684/1,024 → ตัวมี DR ล้ม 0 |
+| ท่าใหม่: หันหัวตามเป้าขณะเดิน | `Microduck-HeadTrack-Flat-Newton` | yaw error 1.4° (v1) / 1.2° (v2) |
+| **Duck Adventure** ด่านตะลุย 5 โซน หลายเลนบน GPU | [`newton_port/newton_adventure.py`](newton_port/newton_adventure.py) | 10 เลน × 180 s ใน 56 s · ประตูบานพับจริงในฟิสิกส์ |
+| เทียบ sim-to-sim: MuJoCo CPU · MuJoCo-Warp · Newton | `newton_duck.py --pd-kd --sensor-lag --act-delay` | kd ของ PD ต่างกันทำความเร็วต่าง 35% |
 
-At deployment the runtime hot-swaps these policies (walk / recover / trick)
-behind a shared 61-dimensional observation contract, so any of them can take
-over the robot at any moment. `scripts/infer_policy.py` rehearses exactly that:
+![Newton throughput vs mjlab](docs/course/newton_scale.png)
+
+## เริ่มรัน
 
 ```bash
-uv run scripts/infer_policy.py --walking walk.onnx --standing stand.onnx \
-    --sitstand sitstand.onnx --roulade roulade.onnx --new-cmd-obs
+# 1) repo นี้ (โค้ด Pollen + งานหลักสูตร) — ต้องมี uv
+git clone git@github.com:pannatron/microduck_rl.git ~/repos/microduck_rl
+cd ~/repos/microduck_rl && uv sync
+
+# 2) policy + npz จาก release
+gh release download course-v1 -R pannatron/microduck_rl -p "*.onnx" -D exports
+gh release download course-v1 -R pannatron/microduck_rl -p "*.npz"  -D newton_port
+
+# 3) Newton อยู่ใน venv ของ Isaac Lab (~/IsaacLab, backend Newton ไม่ต้องมี Isaac Sim)
+cd ~/IsaacLab
+.venv/bin/python ~/repos/microduck_rl/newton_port/newton_duck.py --policy newton_walk_2000 --cmds 0.2,0.3,0.4 --per-cmd 16 --pd-kd 0.053
+.venv/bin/python ~/repos/microduck_rl/newton_port/newton_adventure.py --level adv10 \
+    --policies walk_2000,rough_ft,newton_walk_2000 --per 2 --video /tmp/frames --cam overview
+
+# 4) เทรนบน Newton
+uv run python ~/repos/microduck_rl/newton_port/isaaclab_task/train.py \
+    --task Microduck-Walk-Flat-Newton --num_envs 4096 physics=newton_mjwarp
 ```
 
-Keyboard-driven (velocity commands, `G` ground pick, `Y` sit/stand, `R` roulade,
-`K`/`L` kicks); `--debug`, `--save-csv`, `--record` support sim2real comparisons.
-The servos are simulated with the same BAM M6 XL330 model the policies are
-trained against (voltage control + load-dependent friction, via
-`bam.mujoco.MujocoController`); `--vin` / `--vin-drop-gain` / `--kp-fw` pin the
-training DR ranges to one value, `--no-bam` falls back to the XML PD actuators.
+path ในสคริปต์ยังอ้าง `~/repos/microduck_rl` และ `~/IsaacLab` ตรง ๆ — clone ไว้ที่เดียวกันก่อน
 
-### Backlash variants
+## Duck Adventure
 
-Every main task has a **Backlash** twin that trains on a model with ±1° of gear
-play (2° total) in series with each of the 14 servo joints: insert `-Backlash`
-before `MicroDuck` in the task id, e.g. `Mjlab-Velocity-Flat-Backlash-MicroDuck`.
+![Follow camera in Newton](docs/course/adventure_follow.png)
 
-The backlash is modeled properly for sim2real: each servo gets an unactuated
-`passive_<joint>_backlash` hinge, and because the real encoder sits on the
-output side of the play, both the firmware PD emulation
-(`BacklashEncoderBamActuator`) and the `joint_pos`/`joint_vel` observations
-read *through* the backlash (`qpos[servo] + qpos[backlash]`). Observation and
-action dims are unchanged, so ONNX export and the runtime need no changes.
-See `src/mjlab_microduck/tasks/backlash.py`.
+ด่านเขียนเป็น MJCF ([`playground/make_adventure.py`](playground/make_adventure.py)) แล้ว `newton_adventure.py` อ่าน geom ทุกชิ้นมาสร้างใน Newton ModelBuilder — ด่านไฟล์เดียวใช้ได้ทั้ง Newton และ MuJoCo CPU
+แต่ละเลนเป็น world แยก กติกาเกม (checkpoint, ล้ม/ตกลาวา → เกิดใหม่) และ autopilot คำนวณเป็น tensor บน GPU
 
-## Actuator model
+| policy | Newton ด่าน 10 mm (4 เลน) | MuJoCo CPU + BAM ด่าน 10 mm |
+|---|---|---|
+| velstand (Pollen) | เข้าเส้น 4/4 · 111–140 s | ค้างหน้าบันไดขั้นที่ 2 |
+| rough_ft | ถึง CP4 ล้มที่ประตู | เข้าเส้น 128 s |
+| newton_walk_2000 (เทรนบน Newton) | ถึง CP4 ล้ม 62–70 ครั้ง | — |
+| climb35 (บันได ≤ 3.5 cm) | ติดที่ภูเขา | เข้าเส้น 130 s |
 
-All tasks use the [BAM](https://github.com/Rhoban/bam) M6 actuator model for
-the Dynamixel XL330 (voltage control law, back-EMF, Coulomb/Stribeck/load-dependent
-friction), with per-env domain randomization on battery voltage, voltage sag
-under load, command delay, and friction magnitude
-(`FrictionDRBamActuator` in `src/mjlab_microduck/actuator/`).
+บันได 20 mm ไม่มีใครผ่านบน Newton — `climb35` ยกเท้าได้แค่ ~1.06 cm ตลอดการเทรน
 
-At this scale — tiny servos driving a ~800 g biped — actuator fidelity is most
-of the sim2real gap, which is why the actuator is modeled down to its voltage
-control law instead of an ideal PD.
+## Gotchas ของ Newton ที่เจอจริง
 
-## Robot models
+- `SolverMuJoCo` เท่านั้นที่เสถียร — Featherstone / XPBD / semi-implicit ได้ NaN กับเป็ด (contact kd 100 แข็งเกิน)
+- `njmax` / `nconmax` ของ `SolverMuJoCo` เป็นค่า **ต่อ world** — คูณจำนวน world เองแล้วจะ OOM
+- `body_qd` = `[lin, ang]` ใน world frame · `mj_step` คำนวณ sensor ก่อน integrate → gyro ช้า 1 substep (`--sensor-lag 1`)
+- PD ใน Isaac Lab มี kd 0.053 แต่ position actuator ใน MJCF มี kv 0 → ต้องใส่ `--pd-kd 0.053` ไม่งั้นเป็ดช้าลงและล้ม
+- body ที่มี joint ต้องใช้ `add_link()` ไม่ใช่ `add_body()` (แถม free joint) · `joint_target_q` เป็น layout แบบ coord
+- `ViewerGL` เลื่อน world ไปวางเป็นตารางเอง → `viewer.set_world_offsets((0, 0, 0))` เมื่อฟิสิกส์จัดวางเองแล้ว
 
-MJCF models live in `src/mjlab_microduck/robot/microduck/` and are exported
-from Onshape with [onshape-to-robot](https://github.com/Rhoban/onshape-to-robot),
-one `config_mjcf_*.json` per model:
+## โครง repo
 
-| XML | Used by |
+| ที่ | อะไร |
 |---|---|
-| `robot_walk.xml` | Velocity (stripped trunk/head contacts — falling is cheap) |
-| `robot_groundcontact.xml` | VelStand, StandUp, SitStand, GroundPick, BallKick, Roulade (curated collision set for the parts that touch the floor — body can physically lie on the ground; formerly `robot_allcollisions.xml`) |
-| `robot_groundcontact_rollers.xml` | Roller tasks (passive wheels) |
-| `robot_allcollisions.xml` | True full-collision model — every part has a collision geom. No task uses it yet |
-| `robot_*_backlash.xml` | Backlash task variants (generated by `add_backlash.py`) |
+| `newton_port/` | ทุกอย่างที่เป็น Newton: ตัวรัน, Isaac Lab task, แปลง ONNX ↔ npz, ตัวเทียบ contact/sensor |
+| `playground/` | ฝั่ง MuJoCo CPU: แอปควบคุม (`ctl_*.py`), ด่าน, `sim_play.py` (`--live` = เล่นเองด้วยคีย์บอร์ด), system ID มอเตอร์ |
+| `course/` | README หลักสูตร + ตัวสร้างสไลด์และผลวัด (`course/slides/results*.json`) |
+| `src/`, `scripts/` | โค้ดเดิมของ Pollen — แก้บรรทัดเดียว: env `MICRODUCK_STAIR_MAX` ใน `microduck_velocity_env_cfg.py` |
 
-`scene*.xml` files wrap the robots with a floor + keyframes (STAND/SIT/FOLD)
-for quick viewing and for `infer_policy.py`.
-
-<!-- IMAGE — side-by-side render: walk model vs rollers model (or a collision-geom
-     visualization). One image here makes the model-variant story instant. -->
-
-## Project structure
-
-```
-src/mjlab_microduck/
-├── robot/
-│   ├── microduck/                    # MJCF exports, export configs, scenes, add_backlash.py
-│   └── microduck_constants.py        # robot cfgs, HOME frame, BAM actuator cfg
-├── actuator/friction_dr_bam.py       # BAM + friction DR + backlash encoder feedback
-├── tasks/
-│   ├── __init__.py                   # task registration (base + backlash variants)
-│   ├── mdp.py                        # rewards, events, observations, custom classes
-│   ├── backlash.py                   # make_backlash_variant() env-cfg wrapper
-│   └── microduck_*_env_cfg.py        # one cfg module per task family
-├── train_cli.py                      # `train` script (identical to mjlab's)
-├── train_hook.py                     # intercepts `train ... --hf-jobs`
-└── hf_jobs.py                        # Hugging Face Jobs submission
-```
-
-Conventions worth knowing:
-
-- The observation layout is shared across every policy (61-dim actor obs:
-  48 proprioception + commands `[twist(3), head_pose(4), body_pose(6)]`), which
-  is what makes runtime policy hot-swapping possible. Envs that don't use a
-  command slot zero-pad it rather than dropping it.
-- Unactuated joints are all named `passive_*` (roller wheels, backlash
-  hinges); actuators, joint observations and pose rewards select servo joints
-  with `^(?!passive_).*`.
-- Domain-randomization toggles are `ENABLE_*` booleans at the top of each
-  env cfg file.
-- Joint layout (14 servos): 0–4 left leg (hip_yaw, hip_roll, hip_pitch, knee,
-  ankle), 5–8 neck/head (neck_pitch, head_pitch, head_yaw, head_roll),
-  9–13 right leg.
-- The exporter bakes the observation normalizer into the ONNX graph — always
-  deploy ONNX produced by `scripts/export.py`, never a hand-converted
-  checkpoint, or the policy sees unnormalized observations at runtime.
-
-[AGENTS.md](AGENTS.md) documents the env-building workflow and the reward-design
-rules learned across the project (also aimed at AI coding agents working in
-this repo).
-
-## Publishing a policy
-
-`uv run publish` puts a policy on the Hugging Face Hub in the shape the robot's
-daemon loads: one `policy.onnx` with the observation normalizer baked in, a
-`manifest.json` following schema 2 of the
-[microduck policy manifest](https://github.com/pollen-robotics/microduck/blob/main/docs/policy-manifest.md),
-and a README saying how to run it. Anyone with a microduck can then install it
-with one command, no daemon release needed.
-
-```bash
-# From a wandb run — exports through the one safe path, then uploads
-uv run publish --task Mjlab-PoliteBow-Flat-MicroDuck \
-    --wandb-run-path <entity/project/run_id> --checkpoint 3000 \
-    --repo <user>/microduck-polite-bow --kind episodic --duration-s 4.0 \
-    --description "Bows from a two-foot stand and comes back up."
-
-# From an ONNX you already exported (validated, not re-exported)
-uv run publish --onnx output.onnx --repo <user>/microduck-flamingo \
-    --kind perpetual --unwind-s 1.5 --twist-help "[flag, side, 0]"
-
-# A new gait for a slot
-uv run publish --onnx output.onnx --repo <user>/microduck-my-walk --kind perpetual --slot walk
-
-# Ship a rollout video too: uploaded as replay.mp4, which the Hub's replay widget plays
-uv run scripts/render_policy.py output.onnx --seconds 10 --video media/bow.mp4
-uv run publish --onnx output.onnx --repo <user>/microduck-bow --kind episodic --duration-s 4.0 \
-    --video media/bow.mp4
-
-# A remix (warm-started / fine-tuned from someone's published policy): name the parent so the
-# model card sets `base_model` and the Hub links the two
-uv run publish --onnx output.onnx --repo <user>/microduck-deep-bow --kind episodic --duration-s 5.0 \
-    --base-model <owner>/microduck-polite-bow
-
-# See what would be uploaded without touching the Hub
-uv run publish --onnx output.onnx --repo <user>/microduck-bow --kind episodic --duration-s 4.0 --dry-run
-```
-
-Then on a robot:
-
-```bash
-sudo robotctl policy add polite-bow <user>/microduck-polite-bow   # episodic: length comes from the manifest
-sudo robotctl policy add flamingo <user>/microduck-flamingo --hold 5   # held pose: you pick how long
-sudo robotctl policy load walk <user>/microduck-my-walk                # gait: into the walk slot
-robotctl robot do polite-bow
-```
-
-What `--kind` means, and what each needs:
-
-- **episodic** — runs for `--duration-s` and returns itself to a standing pose
-  (kicks, roulade, a bow). Add `--chain` if holding the button should repeat it.
-- **perpetual** — runs until told otherwise. Two shapes:
-  - a **gait** (a new walk or stand): add `--slot walk` (or `stand`) and
-    nothing else; the owner installs it with `robotctl policy load walk <repo>`.
-  - a **held pose** (the flamingo): give `--unwind-s`, how long the daemon
-    drives the idle twist (`--idle`, zeros by default) before handing back to
-    the gait, so the robot is not let go of on one foot. The owner runs it as a
-    one-shot with `policy add ... --hold <seconds>`.
-
-Before anything is uploaded, `publish` checks the graph is `[1,61] -> [1,14]`
-(a 51-D legacy policy is refused with a message), runs it on plausible inputs
-and refuses NaNs or a constant output, fills the `training` block from git and
-wandb (task, commit, branch, dirty flag, run, checkpoint), and refuses to
-overwrite an existing `.onnx` in the repo without `--force`. Repos are created
-private; `--no-private` for public, `--tag v1` to tag the revision.
-
-Only constant-command policies are publishable this way. Phase-driven moves
-(the ground pick) and the posture-flag sit↔stand are driven by the daemon
-itself and live in the official set, `pollen-robotics/microduck-policies`.
-
-## Tests
-
-```bash
-uv run --with pytest pytest tests/
-```
-
-CPU-only config-invariant and reward-function regression tests — they lock in
-joint-index mappings, reward sign conventions, and NaN guards.
-
-## Related projects
-
-- [microduck](https://github.com/pollen-robotics/microduck) — the Microduck project home, including the onboard runtime that runs the exported policies
-- [mjlab](https://github.com/mujocolab/mjlab) — the training framework (MuJoCo Warp + rsl_rl)
-- [BAM](https://github.com/Rhoban/bam) — better actuator models, by Rhoban
+อัปเดตโค้ดจาก Pollen: `git remote add upstream https://github.com/pollen-robotics/microduck_rl.git && git fetch upstream && git merge upstream/develop`
 
 ## License
 
-The code in this repository is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
-
-The 3D model files (the `.stl` meshes in `src/mjlab_microduck/robot/microduck/assets/`
-and `src/mjlab_microduck/robot/xl330_test_bench/assets/`) are licensed under
-[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).
-See [LICENSE-MODELS.md](LICENSE-MODELS.md) for the exact scope and attribution.
+โค้ดเป็น Apache-2.0 ตาม repo ต้นทาง ([`LICENSE`](LICENSE)) · ไฟล์โมเดล 3D เป็นของ Pollen Robotics ดู [`LICENSE-MODELS.md`](LICENSE-MODELS.md)
