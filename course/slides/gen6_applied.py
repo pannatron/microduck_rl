@@ -71,7 +71,7 @@ put("tof", slide("tof", head("newton.sensors.SensorTiledCamera · sim/tof.py ข
          + table([["รุ่น", "VL53L5CX (ติดบนหัวเป็ดจริง)"], ["ภาพ", "8 × 8 โซน · มุม 45° · ไกลสุด 4 ม."], ["ความถี่", "15 Hz (เราใช้ 16.7 Hz)"],
                   ["noise", "σ = 3 mm + 2 cm × d / 4 m"], ["ตำแหน่ง", "site <code>tof</code> ใน MJCF (บน jaw_soft)"]], ["ToF", "ค่า"], size=27)
          + card("บน Newton ทำยังไง", p("กล้อง pinhole 8×8 ของ <b>SensorTiledCamera</b> วางที่ site ToF แล้วอ่านช่อง <b>depth</b> — เรนเดอร์ทุก world ในครั้งเดียวบน GPU", 27)
-                + p("ไม่เจออะไรใน 4 ม. = “ไม่มีเป้า” เหมือนสถานะ 255 ของตัวจริง", 27, "#4A5563")) + '</div>',
+                + p("ไม่เจออะไรใน 4 ม. = “ไม่มีเป้า” เหมือนสถานะ 255 ของตัวจริง — <b>Newton คืน depth 0</b> ไม่ใช่ inf ต้องแปลงเอง", 27, "#8A4300")) + '</div>',
          f'<div style="width:760px;display:flex;flex-direction:column;gap:16px">'
          + p("ตรวจก่อนใช้: ยืนหันหน้าเข้ากำแพง ห่าง 0.67 ม.", 28, "#1B2430", ";font-weight:600")
          + table([[f"{v:.2f}" for v in row] for row in PROBE], [f"c{j}" for j in range(8)], size=24)
@@ -79,23 +79,25 @@ put("tof", slide("tof", head("newton.sensors.SensorTiledCamera · sim/tof.py ข
     at=1), "ค่าในตารางคือภาพ ToF จริงจาก newton_tof.py --probe: เป็ดยืนที่ x = −3.2 หันไปทางกำแพงตะวันตก (ผิวกำแพง x = −3.94) หัวสูง 0.225 ม.")
 
 put("exA6", slide("exA6", head("Exercise A.6 · See with ToF", "ลาดตระเวนทั้งบ้าน โดยไม่รู้ตำแหน่งตัวเอง", "A.6"),
-    code(f'{G} .venv/bin/python …/newton_tof.py --ctl blind,tof,tof_cliff --per 8 --spawn corridor{SP}{C("# 24 เลน 180 s · 42 s")}', 25),
+    code(f'{G} .venv/bin/python …/newton_tof.py --ctl blind,tof,tof_cliff --per 16 --spawn corridor{SP}{C("# 48 เลน × 180 s")}', 25),
     row=[task(["ตัวคุมเห็นแค่ ToF 8×8 — ไม่มี waypoint ไม่มีตำแหน่ง",
                "<b>blind</b>: เดินตรง เลี้ยวสุ่ม · <b>tof</b>: ข้างหน้าใกล้กว่า 35 ซม. → หมุนไปฝั่งที่โล่ง",
                "ทางเดินมี <b>ช่องบันไดลง</b> 40×70 ซม. — tof มองเห็นไหม?",
                "เขียน <b>tof_cliff</b>: แถวล่างควรเห็นพื้นที่ ~0.66 ม. ถ้าไกลกว่านั้นคือหลุม"]),
          f'<div style="width:900px;display:flex;flex-direction:column">' + vid("tstill_tof", "tvid_tof", "Duck with obstacle-only ToF walking into the stairwell hole, ToF image inset", 900, 506) + '</div>'],
-    at=2), "วิดีโอ: ตัวคุม tof (ดูแค่สิ่งกีดขวาง) เดินตกช่องบันไดที่ 30 s — มุมขวาบนคือภาพ ToF 8×8 ที่เป็ดเห็น สีดำ = ไม่มีเป้าใน 4 ม.")
+    at=2), "วิดีโอ: ตัวคุม tof (ดูแค่สิ่งกีดขวาง) เดินตกช่องบันไดที่ 6.7 s — มุมขวาบนคือภาพ ToF 8×8 ที่เป็ดเห็น สีดำ = ไม่มีเป้าใน 4 ม.")
 
 TT = X["tof"]
-tofrows = [[n, f"{TT['living_' + c]['fell']}/8", f"{TT['corridor_' + c]['fell']}/8", f"{TT['living_' + c]['hole'] + TT['corridor_' + c]['hole']}", f"{(TT['living_' + c]['dist'] + TT['corridor_' + c]['dist']) / 2:.0f} ม."]
+tsum = lambda c, k: TT['living_' + c][k] + TT['corridor_' + c][k]
+tofrows = [[n, f"{TT['living_' + c]['fell']}/16", f"{TT['corridor_' + c]['fell']}/16", f"{tsum(c, 'hole')}/32", f"{tsum(c, 'dist') / 2:.0f} ม."]
            for c, n in (("blind", "blind"), ("tof", "tof"), ("tof_cliff", "tof_cliff"))]
 put("ansA6", answer("ansA6", "A.6", "เซนเซอร์ที่ดีต้องคู่กับคำถามที่ถูก",
-    [f"<b>blind</b> ล้มเกือบทุกเลน ({TT['living_blind']['fell'] + TT['corridor_blind']['fell']}/16) — เดินชนกำแพงแล้วล้ม เดินได้แค่ ~{(TT['living_blind']['dist'] + TT['corridor_blind']['dist']) / 2:.0f} ม.",
-     f"<b>tof</b> เดินได้ไกลขึ้น 4 เท่า แต่<b>ตกช่องบันได {TT['living_tof']['hole'] + TT['corridor_tof']['hole']} ครั้ง</b> — หลุมไม่ใช่ “สิ่งกีดขวางข้างหน้า” จึงไม่เคยถูกถาม",
-     f"<b>tof_cliff</b> เริ่มจากทางเดินหันเข้าหลุม: ล้ม {TT['corridor_tof_cliff']['fell']}/8 (จาก {TT['corridor_tof']['fell']}/8) และไปถึงเฉลี่ย {TT['corridor_tof_cliff']['rooms']} ห้อง",
-     f"ยังตกหลุมจากด้านข้าง {TT['living_tof_cliff']['hole']}/8 เมื่อเริ่มที่ห้องนั่งเล่น — ตรวจแค่คอลัมน์กลาง 4 ช่อง เดินเฉียงเข้าขอบจึงไม่เห็น"],
-    side=vid("tstill_cliff", "tvid_cliff", "Duck with cliff check turning away from the stairwell, ToF inset", 700, 394)
+    [f"<b>blind</b> ล้มเกือบทุกเลน ({tsum('blind', 'fell')}/32) — เดินชนกำแพง/เฟอร์นิเจอร์แล้วล้ม เดินได้แค่ ~{tsum('blind', 'dist') / 2:.0f} ม.",
+     f"<b>tof</b> เดินได้ไกลขึ้น 3 เท่า แต่<b>ตกช่องบันได {tsum('tof', 'hole')}/32</b> — หลุมไม่ใช่ “สิ่งกีดขวางข้างหน้า” จึงไม่เคยถูกถาม",
+     f"<b>tof_cliff</b> ถามเพิ่มว่า “พื้นยังอยู่ไหม” → ตกหลุมเหลือ {tsum('tof_cliff', 'hole')}/32 ล้มรวม {tsum('tof_cliff', 'fell')}/32 และเดินไกลสุด (~{tsum('tof_cliff', 'dist') / 2:.0f} ม.)",
+     "ที่ยังตก มาจาก<b>ด้านข้าง</b>: ตรวจแค่ 4 คอลัมน์กลางของแถวล่างสุด — เดินเลียบขอบหลุม พอหันนิดเดียวเท้าก็หล่น (วิดีโอ 17 s) → Challenge"],
+    side=vid("tstill_cliff", "tvid_cliff", "Duck with centre-only cliff check walking beside the stairwell before slipping in from the side, ToF inset", 700, 394)
          + table(tofrows, ["ตัวคุม", "ล้ม·นั่งเล่น", "ล้ม·ทางเดิน", "ตกหลุม", "ระยะเฉลี่ย"], size=24),
-    summary="ToF ตัวเดิม ถามเพิ่มข้อเดียว (“พื้นยังอยู่ไหม?”) ล้มลดจาก 7/8 เหลือ 1/8", side_w=760),
-    "ตำแหน่งจริงใช้แค่ให้คะแนน (ห้องที่ไปถึง, ตกหลุม) ตัวคุมไม่เห็น · ‘ติด’ = สั่งเดินแต่ขยับไม่ถึง 2 ซม. ใน 0.5 s — ยังสูงทุกตัวคุม (5–11 ครั้ง) — ยังไม่ได้ตรวจว่าติดอะไร")
+    summary=f"ToF ตัวเดิม ถามเพิ่มข้อเดียว (“พื้นยังอยู่ไหม?”) ตกหลุมลดจาก {tsum('tof', 'hole')}/32 เหลือ {tsum('tof_cliff', 'hole')}/32", side_w=760),
+    "16 เลนต่อตัวคุมต่อจุดเริ่ม แต่ละเลนเริ่มหันคนละทิศ · ตำแหน่งจริงใช้แค่ให้คะแนน (ห้องที่ไปถึง, ตกหลุม) ตัวคุมไม่เห็น · ‘ติด’ = สั่งเดินแต่ขยับไม่ถึง 2 ซม. ใน 0.5 s · "
+    "รุ่นแรกของหน้านี้มีบั๊ก: Newton คืน depth 0 เมื่อไม่เจออะไร โค้ดเลยเห็นหลุมเป็น “กำแพงที่ระยะ 0” — tof_cliff ไม่เคยเห็นหลุมจริง ตัวเลขเก่าใช้ไม่ได้ หน้านี้รันใหม่หลังแก้")

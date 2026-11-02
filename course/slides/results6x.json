@@ -167,52 +167,84 @@
  "tof_wall_s_corridor": 41.7,
  "tof": {
   "living_blind": {
-   "n": 8,
-   "fell": 8,
-   "hole": 0,
-   "rooms": 1.4,
-   "dist": 5.1,
-   "stuck": 7.4
+   "n": 16,
+   "fell": 16,
+   "hole": 3,
+   "rooms": 1.19,
+   "dist": 5.2,
+   "stuck": 7.1
   },
   "living_tof": {
-   "n": 8,
-   "fell": 5,
-   "hole": 3,
-   "rooms": 1.8,
-   "dist": 20.7,
-   "stuck": 7.1
+   "n": 16,
+   "fell": 13,
+   "hole": 11,
+   "rooms": 2.56,
+   "dist": 21.1,
+   "stuck": 4.4
   },
   "living_tof_cliff": {
-   "n": 8,
+   "n": 16,
    "fell": 3,
    "hole": 3,
-   "rooms": 2.1,
-   "dist": 20.6,
-   "stuck": 8.6
+   "rooms": 2.62,
+   "dist": 26.7,
+   "stuck": 8.8
   },
-  "corridor_blind": {
-   "n": 8,
-   "fell": 7,
-   "hole": 1,
-   "rooms": 1.4,
-   "dist": 3.3,
-   "stuck": 7.1
-  },
-  "corridor_tof": {
-   "n": 8,
-   "fell": 7,
-   "hole": 5,
-   "rooms": 2.2,
-   "dist": 14.5,
-   "stuck": 4.8
-  },
-  "corridor_tof_cliff": {
-   "n": 8,
+  "living_tof_cliff2": {
+   "n": 16,
    "fell": 1,
    "hole": 0,
-   "rooms": 2.6,
-   "dist": 26.0,
-   "stuck": 11.2
+   "rooms": 1.62,
+   "dist": 34.1,
+   "stuck": 8.0
+  },
+  "living_tof_mem": {
+   "n": 16,
+   "fell": 1,
+   "hole": 0,
+   "rooms": 1.44,
+   "dist": 34.1,
+   "stuck": 8.5
+  },
+  "corridor_blind": {
+   "n": 16,
+   "fell": 15,
+   "hole": 0,
+   "rooms": 1.62,
+   "dist": 5.6,
+   "stuck": 10.4
+  },
+  "corridor_tof": {
+   "n": 16,
+   "fell": 14,
+   "hole": 14,
+   "rooms": 1.69,
+   "dist": 14.0,
+   "stuck": 2.4
+  },
+  "corridor_tof_cliff": {
+   "n": 16,
+   "fell": 6,
+   "hole": 4,
+   "rooms": 2.25,
+   "dist": 21.0,
+   "stuck": 7.7
+  },
+  "corridor_tof_cliff2": {
+   "n": 16,
+   "fell": 8,
+   "hole": 0,
+   "rooms": 2.56,
+   "dist": 23.8,
+   "stuck": 6.6
+  },
+  "corridor_tof_mem": {
+   "n": 16,
+   "fell": 6,
+   "hole": 0,
+   "rooms": 2.69,
+   "dist": 24.8,
+   "stuck": 7.5
   }
  },
  "odom": {
@@ -1336,5 +1368,55 @@
   "fell": 6,
   "n": 6,
   "up_end": 6
+ },
+ "tof_v1_bug_depth0": {
+  "living_blind": {
+   "n": 8,
+   "fell": 8,
+   "hole": 0,
+   "rooms": 1.4,
+   "dist": 5.1,
+   "stuck": 7.4
+  },
+  "living_tof": {
+   "n": 8,
+   "fell": 5,
+   "hole": 3,
+   "rooms": 1.8,
+   "dist": 20.7,
+   "stuck": 7.1
+  },
+  "living_tof_cliff": {
+   "n": 8,
+   "fell": 3,
+   "hole": 3,
+   "rooms": 2.1,
+   "dist": 20.6,
+   "stuck": 8.6
+  },
+  "corridor_blind": {
+   "n": 8,
+   "fell": 7,
+   "hole": 1,
+   "rooms": 1.4,
+   "dist": 3.3,
+   "stuck": 7.1
+  },
+  "corridor_tof": {
+   "n": 8,
+   "fell": 7,
+   "hole": 5,
+   "rooms": 2.2,
+   "dist": 14.5,
+   "stuck": 4.8
+  },
+  "corridor_tof_cliff": {
+   "n": 8,
+   "fell": 1,
+   "hole": 0,
+   "rooms": 2.6,
+   "dist": 26.0,
+   "stuck": 11.2
+  }
  }
 }

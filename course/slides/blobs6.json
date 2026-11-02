@@ -20,10 +20,10 @@
  "dstill_rough300": "b002cf2c76a20193b74d2d8fdd3ed1a7",
  "dvid_nw300": "394c81a346e53893ce33812c2cb3dfc4",
  "dstill_nw300": "bc0aee62792e9d2e69baf148eafc5d5c",
- "tvid_tof": "c03b06b73f8cf902286705ba1807c7be",
- "tstill_tof": "df9c0174febb2ca52be58a6fd60b56d7",
- "tvid_cliff": "6767e185992568977bbdd85ed26df96f",
- "tstill_cliff": "65da81461e15dbff77d5d855ad7cb1f1",
+ "tvid_tof": "2584e5e860bc2df00990e60cf3b3b3fe",
+ "tstill_tof": "9bf1a5403d770e9c934cd183ceb61dc5",
+ "tvid_cliff": "b05ca9d3bc2c73c1558506137e0b0113",
+ "tstill_cliff": "2f591d342343f5b22f0eafdd54545671",
  "odom_scatter": "0f2f8b241a27729903f6ec9c7a709f40",
  "ostill_cmd": "a3eb0772d2c8d0a4c08a75753d90c865",
  "ostill_gyro": "9f5d33a8549759a5cf7055fa49eae7ca",
@@ -34,5 +34,7 @@
  "qvid": "85ceb3696f4e403ecb97adeaca69dcbe",
  "nvid_follow": "9f396d79d6f75280d6901d88fb277326",
  "nstill_follow": "100c99a749e4bc3887ac7d40be7082eb",
- "apt_top_still": "a0b61a075eb45a53455976e4354dce28"
+ "apt_top_still": "a0b61a075eb45a53455976e4354dce28",
+ "tvid_mem": "6d58f0b9e4e368c4ebcee2d9c31571e2",
+ "tstill_mem": "a796bf5de2043416429a375d09f9e60b"
 }

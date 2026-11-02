@@ -1,0 +1,1180 @@
+{
+ "N": 80,
+ "sim_s": 180.0,
+ "wall_s": 51.1,
+ "spawn": "living",
+ "policy": "newton_walk_2000",
+ "stop": 0.35,
+ "lanes": [
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 14.91,
+   "stuck": 19,
+   "fell": true,
+   "t_fall": 118.1,
+   "fall_xy": [
+    -1.18,
+    0.28
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 2.17,
+   "stuck": 5,
+   "fell": true,
+   "t_fall": 20.1,
+   "fall_xy": [
+    -1.16,
+    -0.63
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 2.11,
+   "stuck": 0,
+   "fell": true,
+   "t_fall": 7.8,
+   "fall_xy": [
+    -0.18,
+    -1.01
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 2.05,
+   "stuck": 4,
+   "fell": true,
+   "t_fall": 15.3,
+   "fall_xy": [
+    -1.19,
+    -0.19
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 12.82,
+   "stuck": 11,
+   "fell": true,
+   "t_fall": 78.1,
+   "fall_xy": [
+    -2.87,
+    0.49
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 3.37,
+   "stuck": 6,
+   "fell": true,
+   "t_fall": 23.5,
+   "fall_xy": [
+    -3.53,
+    0.32
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 1.61,
+   "stuck": 1,
+   "fell": true,
+   "t_fall": 11.4,
+   "fall_xy": [
+    -3.25,
+    -1.22
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 10.86,
+   "stuck": 8,
+   "fell": true,
+   "t_fall": 78.0,
+   "fall_xy": [
+    -2.44,
+    0.15
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 2.26,
+   "stuck": 1,
+   "fell": true,
+   "t_fall": 11.6,
+   "fall_xy": [
+    -3.82,
+    -2.04
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 2.85,
+   "stuck": 4,
+   "fell": true,
+   "t_fall": 22.1,
+   "fall_xy": [
+    -3.84,
+    -2.04
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 3.95,
+   "stuck": 24,
+   "fell": true,
+   "t_fall": 108.8,
+   "fall_xy": [
+    -3.4,
+    -2.82
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 2.11,
+   "stuck": 6,
+   "fell": true,
+   "t_fall": 21.2,
+   "fall_xy": [
+    -3.05,
+    -2.75
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 6.01,
+   "stuck": 9,
+   "fell": true,
+   "t_fall": 60.6,
+   "fall_xy": [
+    -3.11,
+    -0.65
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 4.66,
+   "stuck": 3,
+   "fell": true,
+   "t_fall": 26.6,
+   "fall_xy": [
+    -0.21,
+    -1.37
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 5.63,
+   "stuck": 8,
+   "fell": true,
+   "t_fall": 43.0,
+   "fall_xy": [
+    -0.18,
+    -1.4
+   ]
+  },
+  {
+   "ctl": "blind",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 5.53,
+   "stuck": 5,
+   "fell": true,
+   "t_fall": 41.5,
+   "fall_xy": [
+    -2.42,
+    -0.12
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 33.01,
+   "stuck": 10,
+   "fell": true,
+   "t_fall": 156.6,
+   "fall_xy": [
+    -0.23,
+    -0.93
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 16.02,
+   "stuck": 2,
+   "fell": true,
+   "t_fall": 76.4,
+   "fall_xy": [
+    -0.18,
+    -1.29
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 2.07,
+   "stuck": 0,
+   "fell": true,
+   "t_fall": 7.7,
+   "fall_xy": [
+    -0.3,
+    -1.28
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "kitchen",
+    "living",
+    "corridor",
+    "bedroom"
+   ],
+   "n_rooms": 4,
+   "dist_m": 35.35,
+   "stuck": 7,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "kitchen",
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 3,
+   "dist_m": 23.42,
+   "stuck": 1,
+   "fell": true,
+   "t_fall": 116.8,
+   "fall_xy": [
+    -0.25,
+    -1.11
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 18.41,
+   "stuck": 3,
+   "fell": true,
+   "t_fall": 81.5,
+   "fall_xy": [
+    -0.3,
+    -1.36
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "kitchen",
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 3,
+   "dist_m": 38.41,
+   "stuck": 5,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 14.69,
+   "stuck": 2,
+   "fell": true,
+   "t_fall": 73.2,
+   "fall_xy": [
+    -0.31,
+    -1.08
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 18.09,
+   "stuck": 1,
+   "fell": true,
+   "t_fall": 89.0,
+   "fall_xy": [
+    -0.1,
+    -1.24
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 10.31,
+   "stuck": 5,
+   "fell": true,
+   "t_fall": 52.6,
+   "fall_xy": [
+    -0.01,
+    -1.35
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "kitchen",
+    "living",
+    "corridor",
+    "bedroom"
+   ],
+   "n_rooms": 4,
+   "dist_m": 26.77,
+   "stuck": 13,
+   "fell": true,
+   "t_fall": 131.4,
+   "fall_xy": [
+    -0.1,
+    -0.82
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 5.46,
+   "stuck": 2,
+   "fell": true,
+   "t_fall": 25.6,
+   "fall_xy": [
+    -0.32,
+    -1.45
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 27.75,
+   "stuck": 8,
+   "fell": true,
+   "t_fall": 145.2,
+   "fall_xy": [
+    -0.13,
+    -1.49
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 38.49,
+   "stuck": 6,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 20.06,
+   "stuck": 4,
+   "fell": true,
+   "t_fall": 101.4,
+   "fall_xy": [
+    -3.31,
+    -1.15
+   ]
+  },
+  {
+   "ctl": "tof",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 8.93,
+   "stuck": 2,
+   "fell": true,
+   "t_fall": 44.0,
+   "fall_xy": [
+    -0.51,
+    -1.17
+   ]
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 29.44,
+   "stuck": 8,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 28.21,
+   "stuck": 6,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 27.42,
+   "stuck": 7,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 20.36,
+   "stuck": 5,
+   "fell": true,
+   "t_fall": 132.9,
+   "fall_xy": [
+    -0.34,
+    -0.9
+   ]
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 27.23,
+   "stuck": 7,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 28.04,
+   "stuck": 14,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 30.91,
+   "stuck": 13,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 18.24,
+   "stuck": 4,
+   "fell": true,
+   "t_fall": 97.8,
+   "fall_xy": [
+    -0.3,
+    -0.79
+   ]
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 22.73,
+   "stuck": 3,
+   "fell": true,
+   "t_fall": 126.6,
+   "fall_xy": [
+    -0.32,
+    -1.41
+   ]
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 27.13,
+   "stuck": 7,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 28.91,
+   "stuck": 13,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 29.68,
+   "stuck": 8,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 2,
+   "dist_m": 27.66,
+   "stuck": 10,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 19.58,
+   "stuck": 15,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 31.3,
+   "stuck": 12,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff",
+   "rooms": [
+    "kitchen",
+    "living",
+    "corridor",
+    "office"
+   ],
+   "n_rooms": 4,
+   "dist_m": 30.63,
+   "stuck": 8,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 35.19,
+   "stuck": 10,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 35.89,
+   "stuck": 6,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 35.61,
+   "stuck": 8,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 18.18,
+   "stuck": 3,
+   "fell": true,
+   "t_fall": 90.1,
+   "fall_xy": [
+    -3.12,
+    0.33
+   ]
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 33.37,
+   "stuck": 8,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 36.4,
+   "stuck": 6,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 35.86,
+   "stuck": 7,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 35.9,
+   "stuck": 8,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 35.48,
+   "stuck": 7,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 35.86,
+   "stuck": 13,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 35.92,
+   "stuck": 7,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "living",
+    "corridor",
+    "bath"
+   ],
+   "n_rooms": 3,
+   "dist_m": 32.64,
+   "stuck": 9,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 36.09,
+   "stuck": 10,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 33.45,
+   "stuck": 9,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 36.1,
+   "stuck": 6,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_cliff2",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 34.45,
+   "stuck": 11,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 33.84,
+   "stuck": 10,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 35.65,
+   "stuck": 6,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 35.0,
+   "stuck": 5,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "kitchen",
+    "living",
+    "corridor"
+   ],
+   "n_rooms": 3,
+   "dist_m": 38.19,
+   "stuck": 9,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 35.3,
+   "stuck": 5,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "kitchen",
+    "living"
+   ],
+   "n_rooms": 2,
+   "dist_m": 31.98,
+   "stuck": 11,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 35.68,
+   "stuck": 12,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 35.0,
+   "stuck": 7,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 36.44,
+   "stuck": 11,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 37.42,
+   "stuck": 7,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 36.22,
+   "stuck": 8,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 15.32,
+   "stuck": 3,
+   "fell": true,
+   "t_fall": 79.5,
+   "fall_xy": [
+    -1.83,
+    -0.03
+   ]
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 35.44,
+   "stuck": 10,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 36.42,
+   "stuck": 11,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "kitchen",
+    "living",
+    "corridor",
+    "bedroom"
+   ],
+   "n_rooms": 4,
+   "dist_m": 37.22,
+   "stuck": 12,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  },
+  {
+   "ctl": "tof_mem",
+   "rooms": [
+    "living"
+   ],
+   "n_rooms": 1,
+   "dist_m": 30.41,
+   "stuck": 9,
+   "fell": false,
+   "t_fall": null,
+   "fall_xy": null
+  }
+ ],
+ "groups": {
+  "blind": {
+   "n": 16,
+   "rooms_mean": 1.19,
+   "dist_mean": 5.18,
+   "stuck_mean": 7.12,
+   "fell": 16
+  },
+  "tof": {
+   "n": 16,
+   "rooms_mean": 2.56,
+   "dist_mean": 21.08,
+   "stuck_mean": 4.44,
+   "fell": 13
+  },
+  "tof_cliff": {
+   "n": 16,
+   "rooms_mean": 2.62,
+   "dist_mean": 26.72,
+   "stuck_mean": 8.75,
+   "fell": 3
+  },
+  "tof_cliff2": {
+   "n": 16,
+   "rooms_mean": 1.62,
+   "dist_mean": 34.15,
+   "stuck_mean": 8.0,
+   "fell": 1
+  },
+  "tof_mem": {
+   "n": 16,
+   "rooms_mean": 1.44,
+   "dist_mean": 34.1,
+   "stuck_mean": 8.5,
+   "fell": 1
+  }
+ }
+}

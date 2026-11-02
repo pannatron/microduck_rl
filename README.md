@@ -35,15 +35,15 @@ README เดิมของ Pollen อยู่ที่ [`README.pollen.md`](R
 | | |
 |---|---|
 | [![sprint over 20 mm stairs](docs/course/newton_sprint.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-sprint-20mm.mp4)<br>**แก้ด่านโดยไม่เทรนใหม่** · สั่ง 0.6 m/s เฉพาะช่วงบันได → ข้าม 20 mm ได้ 52/64 เลน (จาก 25/64) | [![delivery with 300 g parcel](docs/course/delivery_300g.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-delivery-rough_ft-300g.mp4)<br>**ส่งพัสดุในอพาร์ตเมนต์ของ Pollen** · [`newton_delivery.py`](newton_port/newton_delivery.py) · พัสดุ 0–400 g × 3 เส้นทาง |
-| [![ToF obstacle-only falls into stairwell](docs/course/tof_hole.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-tof-falls-into-stairwell.mp4)<br>**ToF 8×8 ของเป็ดจริงบน Newton** · ดูแค่สิ่งกีดขวาง → ตกช่องบันได | [![ToF with cliff check](docs/course/tof_cliff.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-tof-cliff-check.mp4)<br>**+ ตรวจพื้น (cliff)** · [`newton_tof.py`](newton_port/newton_tof.py) · ล้มจาก 7/8 เหลือ 1/8 |
+| [![ToF obstacle-only falls into stairwell](docs/course/tof_hole.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-tof-falls-into-stairwell.mp4)<br>**ToF 8×8 ของเป็ดจริงบน Newton** · ดูแค่สิ่งกีดขวาง → ตกช่องบันได 25/32 เลน | [![ToF with all-column cliff check and hole memory](docs/course/tof_mem.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-tof-mem-no-fall.mp4)<br>**Challenge: ไม่ตกหลุม** · [`newton_tof.py`](newton_port/newton_tof.py) `tof_mem` · ตรวจพื้นทุกคอลัมน์ + จำจุดหลุม → ตก 0/32 ([ตรวจแค่ตรงกลาง](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-tof-cliff-check.mp4) ยังตก 7/32) |
 
 | งาน | ผลวัด |
 |---|---|
 | ส่งพัสดุ ≤ 200 g | `newton_walk_2000` ส่งครบ 12/12 ใน 15–20 s · 300 g ส่งได้ 4/12 |
 | ส่งพัสดุ 300–400 g | `rough_ft` ส่งครบ 12/12 ทุกน้ำหนัก (34–40 s) · velstand ครบถึง 300 g แต่ช้ากว่า |
-| ToF: เดินไม่รู้ตำแหน่ง 180 s | blind ล้ม 15/16 · ToF ล้ม 12/16 (ตกช่องบันได 8) · ToF + cliff ล้ม 4/16 |
+| ToF: เดินไม่รู้ตำแหน่ง 180 s (32 เลน/ตัวคุม) | blind ล้ม 31 · tof ตกช่องบันได 25 · tof_cliff ตก 7 · tof_cliff2 / tof_mem ตก **0** (ที่ยังล้ม 9 / 7 ครั้งคือชนเฟอร์นิเจอร์) |
 
-ToF ใช้ `newton.sensors.SensorTiledCamera` เป็นกล้อง depth 8×8 มุม 45° วางที่ site `tof` บนหัวเป็ด + noise ตาม [`sim/tof.py`](src/mjlab_microduck/sim/tof.py) ของ Pollen — เรนเดอร์ทุก world ในครั้งเดียว
+ToF ใช้ `newton.sensors.SensorTiledCamera` เป็นกล้อง depth 8×8 มุม 45° วางที่ site `tof` บนหัวเป็ด + noise ตาม [`sim/tof.py`](src/mjlab_microduck/sim/tof.py) ของ Pollen — เรนเดอร์ทุก world ในครั้งเดียว · ระวัง: รังสีที่ไม่ชนอะไรได้ depth **0** ไม่ใช่ inf — ต้องแปลงเป็น “ไม่มีเป้า” เอง (ผล ToF รุ่นแรกผิดเพราะจุดนี้)
 
 | | |
 |---|---|

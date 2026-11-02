@@ -7,12 +7,18 @@ noise σ = 3 mm + 2 cm·d/4 m แบบ src/mjlab_microduck/sim/tof.py ของ
 ตัวคุม (เลือกต่อกลุ่มเลน):
   blind      เดินตรง เลี้ยวสุ่มทุก 4–8 s (ไม่ใช้เซนเซอร์)
   tof        ข้างหน้าใกล้กว่า STOP → หยุดแล้วหมุนไปฝั่งที่โล่งกว่า
-  tof_cliff  เหมือน tof + แถวล่างที่ควรเห็นพื้นกลับไกลเกิน (หลุม/บันไดลง) → ถอยหัวหนี
+  tof_cliff  เหมือน tof + แถวล่างที่ควรเห็นพื้นกลับไกลเกิน (หลุม/บันไดลง) → ถอยหัวหนี (ดูแค่ 4 คอลัมน์กลาง แถวล่างสุด)
+  tof_mem    tof_cliff2 + จำตำแหน่งหลุมที่เคยเห็นในแผนที่ของตัวเอง (dead reckoning: gyro + คำสั่ง แบบ A.7)
+             แล้วกันไม่ให้เดินเข้าใกล้ แม้หลุมพ้นจากภาพ ToF ไปแล้ว (เท้าอยู่ใต้ภาพ ToF ที่เห็นแค่ 0.4–0.9 ม. ข้างหน้า)
+  tof_cliff2 ตรวจพื้นทุกคอลัมน์ ทั้งแถว 7 (~0.66 ม.) และแถว 6 (~0.9 ม.) · หลุมด้านข้าง → เดินช้าแล้วเบี่ยงหนี ·
+             หลุมตรงหน้า → หมุนไปฝั่งที่ไม่มีหลุม และหมุนต่อจนหลุมพ้นภาพ
 คะแนน (ใช้ตำแหน่งจริงเฉพาะตอนให้คะแนน ตัวคุมไม่เห็น): ห้องที่ไปถึง, ระยะทาง, จำนวนครั้งที่ชน/ติด, ล้ม (รวมตกช่องบันได)
 
 รันจาก ~/IsaacLab:
   .venv/bin/python ~/repos/microduck_rl/newton_port/newton_tof.py --ctl blind,tof,tof_cliff --per 8 --secs 180
+  .venv/bin/python ~/repos/microduck_rl/newton_port/newton_tof.py --ctl tof_cliff,tof_cliff2,tof_mem --per 16 --secs 180   # Challenge: ไม่ตกหลุม
   .venv/bin/python ~/repos/microduck_rl/newton_port/newton_tof.py --probe            # พิมพ์ภาพ ToF 8×8 ตอนยืนหน้ากำแพง
+  .venv/bin/python ~/repos/microduck_rl/newton_port/newton_tof.py --probe --spawn hole   # ยืนหน้าช่องบันได: แถวล่างต้องเป็น inf
 """
 import argparse, os, json, math, time
 import numpy as np, torch, warp as wp, newton, mujoco
@@ -38,8 +44,8 @@ a = ap.parse_args()
 dev = "cuda:0"
 CTL = a.ctl.split(",")
 N = 1 if a.probe else len(CTL) * a.per
-SPAWNS = {"living": ((-2.0, -1.9), 0.0), "corridor": ((-0.2, 0.6), -math.pi / 2), "wall": ((-3.2, 1.9), math.pi)}   # wall: หันหน้าเข้ากำแพงตะวันตก ห่าง 0.8 ม.
-(sx, sy), syaw = SPAWNS["wall" if a.probe else a.spawn]
+SPAWNS = {"living": ((-2.0, -1.9), 0.0), "corridor": ((-0.2, 0.6), -math.pi / 2), "wall": ((-3.2, 1.9), math.pi), "hole": ((-0.2, -0.3), -math.pi / 2)}   # wall: หันหน้าเข้ากำแพงตะวันตก ห่าง 0.8 ม.
+(sx, sy), syaw = SPAWNS[("hole" if a.spawn == "hole" else "wall") if a.probe else a.spawn]
 ROOMS = {"kitchen": (-4, -1, 0.5, 3), "living": (-4, -1, -3, 0.5), "corridor": (-1, 0.5, -3, 3), "bedroom": (0.5, 4, 1, 3), "office": (0.5, 4, -1, 1), "bath": (0.5, 4, -3, -1)}
 
 # ---------------------------------------------------------------- policy
@@ -122,18 +128,22 @@ rays = cam_sensor.utils.compute_camera_rays_pinhole(TOF_W, TOF_W, camera_fovs=FO
 depth = cam_sensor.utils.create_depth_image_output(TOF_W, TOF_W)
 cam_tf = wp.zeros((1, N), dtype=wp.transformf, device=dev)
 gen = torch.Generator(device=dev).manual_seed(1)
+CAM = {}
+RAYD = wp.to_torch(rays).view(TOF_W, TOF_W, 2, 3)[:, :, 1, :]          # ทิศรังสีในเฟรมกล้อง (แถว, คอลัมน์, xyz)
 def tof_frame():
     bq = wp.to_torch(s0.body_q)[head]
     pos = bq[:, :3] + qrot(bq[:, 3:7], SITE_P.expand(N, 3)); q = qmul(qmul(bq[:, 3:7], SITE_Q.expand(N, 4)), CAM_Q.expand(N, 4))
     wp.to_torch(cam_tf).view(1, N, 7).copy_(torch.cat([pos, q], 1).unsqueeze(0))
+    CAM['p'], CAM['q'] = pos.clone(), q.clone()
     model.bvh_refit_shapes(s0) if hasattr(model, "bvh_refit_shapes") else None
     cam_sensor.update(s0, cam_tf, rays, depth_image=depth)
     d = wp.to_torch(depth).view(N, TOF_W, TOF_W).clone()                   # แถว 0 = บนสุด
-    nohit = (d < 0) | (d > MAXR)
+    nohit = (d <= 1e-4) | (d > MAXR)                                        # ไม่ชนอะไร: SensorTiledCamera คืน depth 0 (shape index −1) ไม่ใช่ค่าลบตาม docstring
     d = d + torch.randn(d.shape, device=dev, generator=gen) * (0.003 + 0.02 * d.clamp(min=0) / MAXR)
     return torch.where(nohit, torch.full_like(d, float("inf")), d.clamp(min=0))
 
 # ---------------------------------------------------------------- loop พื้นฐาน
+def qri_(q, v): return quat_rot_inv(q, v)
 def quat_rot_inv(qxyzw, v):
     x, y, z, w = qxyzw.unbind(-1); u = torch.stack([-x, -y, -z], -1); t = 2 * torch.cross(u, v, dim=-1)
     return v + w.unsqueeze(-1) * t + torch.cross(u, t, dim=-1)
@@ -160,6 +170,13 @@ if a.probe:                                          # ยืนนิ่ง 1 s
         for k in range(50):
             obs, bq = obs_now(k); act = policy(obs); last = act; tgt[:, TQ] = default + act; wp.capture_launch(graph)
     D = tof_frame()[0].cpu().numpy()
+    sidx = cam_sensor.utils.create_shape_index_image_output(TOF_W, TOF_W)
+    raw = cam_sensor.utils.create_depth_image_output(TOF_W, TOF_W)
+    cam_sensor.update(s0, cam_tf, rays, depth_image=raw, shape_index_image=sidx)
+    SI = sidx.numpy().reshape(N, TOF_W, TOF_W)[0]; RD = raw.numpy().reshape(N, TOF_W, TOF_W)[0]
+    labels = model.shape_label
+    for r in (5, 6, 7):
+        print("row", r, [(round(float(RD[r, c]), 3), labels[int(SI[r, c])].split("/")[-1][:22] if int(SI[r, c]) < len(labels) else int(SI[r, c])) for c in range(TOF_W)])
     bq = wp.to_torch(s0.body_q)[head][0].cpu().numpy()
     print("head z %.3f · trunk at (%.2f, %.2f) yaw %.0f° · wall x = -4.0 (inner face -3.94)" % (bq[2], sx, sy, math.degrees(syaw)))
     for r in range(TOF_W): print(" ".join("  inf" if not np.isfinite(v) else f"{v:5.2f}" for v in D[r]))
@@ -168,6 +185,17 @@ if a.probe:                                          # ยืนนิ่ง 1 s
 # ---------------------------------------------------------------- ตัวคุม (เห็นแค่ ToF + gyro, ไม่เห็นตำแหน่ง)
 cid = torch.tensor([CTL.index(CTL[i // a.per]) for i in range(N)], device=dev)
 K_TOF, K_TOFC = CTL.index("tof") if "tof" in CTL else -1, CTL.index("tof_cliff") if "tof_cliff" in CTL else -1
+K_TOFC2 = CTL.index("tof_cliff2") if "tof_cliff2" in CTL else -1
+K_MEM = CTL.index("tof_mem") if "tof_mem" in CTL else -1
+MEMN = 96
+mem_pts = torch.zeros(N, MEMN, 2, device=dev); mem_ok = torch.zeros(N, MEMN, dtype=torch.bool, device=dev); mem_i = torch.zeros(N, dtype=torch.long, device=dev)
+est_p = torch.zeros(N, 2, device=dev); est_yaw = torch.zeros(N, device=dev); last_ctl_t = [None]
+ROW6 = math.atan((6.5 / 8 - 0.5) * 2 * math.tan(math.radians(45.0) / 2))  # ≈ 14.5°
+side_until = torch.zeros(N, device=dev); side_dir = torch.zeros(N, device=dev)
+TRACE_LOG = []
+R6K = float(os.environ.get('R6K', 1.8))
+GEO = os.environ.get('GEO', '1') == '1'; GK = float(os.environ.get('GK', 1.25))
+DROP = float(os.environ.get('DROP', 0.04))      # ม. — ต่ำกว่าพื้นเท่านี้ถือว่าเป็นหลุม (ขั้นแรกของบันไดลงต่ำ 10 ซม.)   # ใช้ทิศรังสีจริง · เกณฑ์ ×ระยะที่ควรเห็น      # เกณฑ์แถว 6 (×ระยะพื้นที่ควรเห็น) · 0 = ไม่ใช้แถว 6
 mode = torch.zeros(N, dtype=torch.long, device=dev)            # 0 เดิน · 1 หมุนหลบ
 turn_dir = torch.ones(N, device=dev); turn_until = torch.zeros(N, device=dev); next_rand = torch.rand(N, device=dev, generator=gen) * 4 + 4
 ROW7 = math.atan((7.5 / 8 - 0.5) * 2 * math.tan(FOV / 2))     # มุมก้มของแถวล่างสุด (≈ 19.9°)
@@ -182,18 +210,65 @@ def control(t, D):
     cliff = floor_now > floor_exp * 1.35 + 0.05                # พื้นข้างหน้าไกลกว่าที่ควร (หรือไม่เจอเลย) = หลุม/บันไดลง
     blocked = front < a.stop
     walking = mode == 0
-    use_tof = (cid == K_TOF) | (cid == K_TOFC)
-    start_turn = walking & use_tof & (blocked | ((cid == K_TOFC) & cliff))
+    c2 = (cid == K_TOFC2) | (cid == K_MEM)
+    mem = cid == K_MEM
+    # tof_cliff2: แผนที่หลุมต่อคอลัมน์ (คอลัมน์ 0 = ซ้ายของเป็ด)
+    if GEO:   # ระยะพื้นที่ควรเห็นต่อรังสี จากท่าหัวจริง (IMU + encoder บอกได้บนหุ่นจริง) — ไม่หลอกตอนหัวก้มเงย
+        q = CAM["q"]; dirs = qrot(q[:, None, None, :].expand(N, 3, TOF_W, 4).reshape(-1, 4), RAYD[5:8].reshape(1, -1, 3).expand(N, -1, -1).reshape(-1, 3)).view(N, 3, TOF_W, 3)
+        dz = -dirs[..., 2]; exp_d = torch.where(dz > 0.05, CAM["p"][:, 2, None, None] / dz.clamp(min=0.05), torch.full_like(dz, 9.0))
+        z_hit = CAM["p"][:, 2, None, None] - D[:, 5:8, :] * dz              # ความสูงของจุดที่รังสีชน (inf → −inf = ไม่เจออะไร)
+        cgrid = (z_hit < -DROP) & (dz > 0.05) & (exp_d < 2.0)               # จุดต่ำกว่าพื้น ≥ DROP = พื้นหาย/บันไดลง (N, 3 แถว, 8 คอลัมน์)
+        cc = cgrid.any(1)
+        if K_MEM >= 0:
+            # อัปเดตท่าที่ “คิดว่า” อยู่ (gyro + คำสั่ง) แล้วบันทึกจุดพื้นหาย ในพิกัดแผนที่ของตัวเอง
+            dt_c = 0.06 if last_ctl_t[0] is None else t - last_ctl_t[0]; last_ctl_t[0] = t
+            tq = wp.to_torch(s0.body_q)[trunk][:, 3:7]; gz = qri_(tq, wp.to_torch(s0.body_qd)[trunk][:, 3:6])[:, 2]
+            est_yaw[:] = est_yaw + gz * dt_c
+            est_p[:] = est_p + torch.stack([torch.cos(est_yaw), torch.sin(est_yaw)], 1) * cmd[:, 0:1] * dt_c
+            hb = qri_(tq[:, None, None, :].expand(N, 3, TOF_W, 4).reshape(-1, 4), dirs.reshape(-1, 3)).view(N, 3, TOF_W, 3)   # ทิศรังสีในเฟรมลำตัว
+            hxy = hb[..., :2] / hb[..., :2].norm(dim=-1, keepdim=True).clamp(min=1e-6)
+            horiz = exp_d * (1 - dz ** 2).clamp(min=0).sqrt()                  # ระยะแนวราบถึงจุดที่พื้นควรอยู่
+            vb = hxy * horiz[..., None]                                          # (N,3,8,2) เฟรมลำตัว
+            c, sn = torch.cos(est_yaw)[:, None, None], torch.sin(est_yaw)[:, None, None]
+            wpt = est_p[:, None, None, :] + torch.stack([c * vb[..., 0] - sn * vb[..., 1], sn * vb[..., 0] + c * vb[..., 1]], -1)
+            for i in torch.nonzero(mem & cgrid.any((1, 2))).flatten().tolist():
+                pts = wpt[i][cgrid[i]][:8]
+                for pt in pts:
+                    k = int(mem_i[i]) % MEMN; mem_pts[i, k] = pt; mem_ok[i, k] = True; mem_i[i] += 1
+            rel = mem_pts - est_p[:, None, :]; cy, sy = torch.cos(-est_yaw)[:, None], torch.sin(-est_yaw)[:, None]
+            rx, ry = cy * rel[..., 0] - sy * rel[..., 1], sy * rel[..., 0] + cy * rel[..., 1]
+            m_mid = (mem_ok & (rx > -0.05) & (rx < 0.45) & (ry.abs() < 0.18)).any(1)
+            m_l = (mem_ok & (rx > -0.15) & (rx < 0.35) & (ry >= 0.18) & (ry < 0.32)).any(1)
+            m_r = (mem_ok & (rx > -0.15) & (rx < 0.35) & (ry <= -0.18) & (ry > -0.32)).any(1)
+            cc = cc.clone(); cc[:, 3] |= mem & m_mid; cc[:, 0] |= mem & m_l; cc[:, 7] |= mem & m_r
+        if os.environ.get("DBG") and int(round(t * 50)) % 12 == 0 and t < 6:
+            print(f"t={t:.1f} pos={[round(float(v),2) for v in CAM['p'][0]]} D7={[round(float(v),2) for v in D[0,7]]}\n   exp7={[round(float(v),2) for v in exp_d[0,2]]} D6={[round(float(v),2) for v in D[0,6]]} exp6={[round(float(v),2) for v in exp_d[0,1]]} cc={cc[0].int().tolist()}")
+    else:
+        cc = (D[:, 7, :] > (hz / math.sin(ROW7))[:, None] * 1.35 + 0.05) | ((D[:, 6, :] > (hz / math.sin(ROW6))[:, None] * R6K + 0.08) & (R6K > 0))
+    c_mid, c_left, c_right = cc[:, 2:6].any(1), cc[:, :2].any(1), cc[:, 6:].any(1)
+    cliff = torch.where(c2, c_mid | c_left | c_right, cliff)
+    use_tof = (cid == K_TOF) | (cid == K_TOFC) | c2
+    start_turn = walking & use_tof & (blocked | ((cid == K_TOFC) & cliff) | (c2 & c_mid))
     # blind: เลี้ยวสุ่ม 1–2 s ทุก 4–8 s
-    rnd = walking & (cid != K_TOF) & (cid != K_TOFC) & (t > next_rand)
+    rnd = walking & ~use_tof & (t > next_rand)
     nd = torch.where(left > right, 1.0, -1.0)
+    away = torch.where(cc[:, :4].sum(1) > cc[:, 4:].sum(1), -1.0, 1.0)     # หลุมฝั่งซ้ายมากกว่า → หมุนขวา (−)
+    nd = torch.where(c2 & c_mid, away, nd)
     turn_dir[start_turn] = nd[start_turn]; turn_dir[rnd] = torch.where(torch.rand(N, device=dev, generator=gen) > 0.5, 1.0, -1.0)[rnd]
     dur = torch.where(start_turn, 0.8 + torch.rand(N, device=dev, generator=gen) * 1.2, 1.0 + torch.rand(N, device=dev, generator=gen))
     turn_until[start_turn | rnd] = t + dur[start_turn | rnd]; mode[start_turn | rnd] = 1
     next_rand[rnd] = t + 4 + torch.rand(N, device=dev, generator=gen)[rnd] * 4
-    fin = (mode == 1) & (t > turn_until) & ~(use_tof & blocked)   # หมุนจนข้างหน้าโล่ง
+    fin = (mode == 1) & (t > turn_until) & ~(use_tof & blocked) & ~(c2 & c_mid)   # หมุนจนข้างหน้าโล่ง (และไม่มีหลุมตรงหน้า)
     mode[fin] = 0
-    cmd[:, 0] = torch.where(mode == 0, a.vx, 0.0); cmd[:, 2] = torch.where(mode == 1, 0.8 * turn_dir, 0.0)
+    # หลุมด้านข้าง (tof_cliff2): จำไว้ 1.5 s แล้วเดินช้า + เบี่ยงหนี
+    side = c2 & (mode == 0) & (c_left ^ c_right)
+    side_dir[side] = torch.where(c_left, -1.0, 1.0)[side]; side_until[side] = t + 1.5
+    veer = c2 & (mode == 0) & (t < side_until)
+    cmd[:, 0] = torch.where(mode == 0, torch.where(veer, 0.2, a.vx), 0.0)
+    if os.environ.get("TRACE"):
+        bq_ = wp.to_torch(s0.body_q)[trunk]; pp = bq_[:, :2] - origin
+        TRACE_LOG.append([round(t, 2)] + [[round(float(pp[i, 0]), 2), round(float(pp[i, 1]), 2), int(mode[i]), int(c_mid[i]), int(c_left[i]), int(c_right[i]), int(veer[i]), round(float(front[i]), 2)] for i in range(N)])
+    cmd[:, 2] = torch.where(mode == 1, 0.8 * turn_dir, torch.where(veer, 0.6 * side_dir, 0.0))
     return front, cliff
 
 # ---------------------------------------------------------------- คะแนน (ตำแหน่งจริง ใช้แค่ให้คะแนน)
@@ -266,4 +341,5 @@ for c in CTL:
                             stuck_mean=round(sum(l["stuck"] for l in L) / len(L), 2), fell=sum(l["fell"] for l in L))
 print(json.dumps({k: v for k, v in res.items() if k != "lanes"}, ensure_ascii=False))
 if a.out: json.dump(res, open(a.out, "w"), ensure_ascii=False, indent=1)
+if os.environ.get('TRACE'): json.dump(TRACE_LOG, open(os.environ['TRACE'], 'w'))
 if a.video: json.dump(tof_log, open(os.path.join(a.video, "tof.json"), "w"))
