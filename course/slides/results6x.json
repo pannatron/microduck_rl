@@ -200,5 +200,592 @@
    "dist": 26.0,
    "stuck": 11.2
   }
+ },
+ "odom": {
+  "sq1": {
+   "cmd": {
+    "n": 32,
+    "finished": 32,
+    "fell": 0,
+    "home_err_med": 0.313,
+    "home_err_max": 0.362
+   },
+   "gyro": {
+    "n": 32,
+    "finished": 32,
+    "fell": 0,
+    "home_err_med": 0.137,
+    "home_err_max": 0.357
+   },
+   "gyro_cal": {
+    "n": 32,
+    "finished": 32,
+    "fell": 0,
+    "home_err_med": 0.157,
+    "home_err_max": 0.353
+   },
+   "gyro_still": {
+    "n": 32,
+    "finished": 32,
+    "fell": 0,
+    "home_err_med": 0.578,
+    "home_err_max": 1.361
+   }
+  },
+  "sq3": {
+   "cmd": {
+    "n": 32,
+    "finished": 32,
+    "fell": 0,
+    "home_err_med": 0.922,
+    "home_err_max": 1.044
+   },
+   "gyro": {
+    "n": 32,
+    "finished": 32,
+    "fell": 0,
+    "home_err_med": 0.412,
+    "home_err_max": 0.905
+   },
+   "gyro_cal": {
+    "n": 32,
+    "finished": 32,
+    "fell": 0,
+    "home_err_med": 0.364,
+    "home_err_max": 0.929
+   },
+   "gyro_still": {
+    "n": 32,
+    "finished": 32,
+    "fell": 0,
+    "home_err_med": 1.612,
+    "home_err_max": 2.56
+   }
+  },
+  "still1": {
+   "bias_err_med_deg_s": 0.216,
+   "true_gyro_while_still_deg_s": 0.347,
+   "groups": {
+    "gyro_cal": {
+     "n": 32,
+     "finished": 32,
+     "fell": 0,
+     "home_err_med": 0.414,
+     "home_err_max": 0.966
+    },
+    "gyro_still": {
+     "n": 32,
+     "finished": 32,
+     "fell": 0,
+     "home_err_med": 0.784,
+     "home_err_max": 2.44
+    }
+   }
+  },
+  "still3": {
+   "bias_err_med_deg_s": 0.085,
+   "true_gyro_while_still_deg_s": 0.073,
+   "groups": {
+    "gyro_cal": {
+     "n": 32,
+     "finished": 32,
+     "fell": 0,
+     "home_err_med": 0.439,
+     "home_err_max": 1.034
+    },
+    "gyro_still": {
+     "n": 32,
+     "finished": 32,
+     "fell": 0,
+     "home_err_med": 0.512,
+     "home_err_max": 1.124
+    }
+   }
+  },
+  "perfect": {
+   "gyro": {
+    "n": 32,
+    "finished": 32,
+    "fell": 0,
+    "home_err_med": 0.423,
+    "home_err_max": 0.506
+   },
+   "gyro_cal": {
+    "n": 32,
+    "finished": 32,
+    "fell": 0,
+    "home_err_med": 0.424,
+    "home_err_max": 0.544
+   }
+  },
+  "k": 0.992
+ },
+ "qa": {
+  "N": 1008,
+  "reps": 21,
+  "sim_s": 20,
+  "wall_s": 7.6,
+  "policies": [
+   "walk_2000",
+   "rough_ft",
+   "velstand",
+   "climb35",
+   "newton_walk_2000",
+   "newton_latency_2000"
+  ],
+  "tests": [
+   "nominal",
+   "box",
+   "push05",
+   "push10",
+   "ice",
+   "weak",
+   "heavy",
+   "imu"
+  ],
+  "cells": {
+   "walk_2000|nominal": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 2.02
+   },
+   "walk_2000|box": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 21,
+    "dist_med": null
+   },
+   "walk_2000|push05": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 21,
+    "dist_med": null
+   },
+   "walk_2000|push10": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 21,
+    "dist_med": null
+   },
+   "walk_2000|ice": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.92
+   },
+   "walk_2000|weak": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 2.02
+   },
+   "walk_2000|heavy": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.98
+   },
+   "walk_2000|imu": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.9
+   },
+   "rough_ft|nominal": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.71
+   },
+   "rough_ft|box": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 6.29
+   },
+   "rough_ft|push05": {
+    "pass_": 17,
+    "n": 21,
+    "fell": 2,
+    "dist_med": 2.21
+   },
+   "rough_ft|push10": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 21,
+    "dist_med": null
+   },
+   "rough_ft|ice": {
+    "pass_": 4,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.42
+   },
+   "rough_ft|weak": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.71
+   },
+   "rough_ft|heavy": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.77
+   },
+   "rough_ft|imu": {
+    "pass_": 20,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.61
+   },
+   "velstand|nominal": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.62
+   },
+   "velstand|box": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.16
+   },
+   "velstand|push05": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 20,
+    "dist_med": 1.19
+   },
+   "velstand|push10": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 21,
+    "dist_med": null
+   },
+   "velstand|ice": {
+    "pass_": 4,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.49
+   },
+   "velstand|weak": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.62
+   },
+   "velstand|heavy": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.21
+   },
+   "velstand|imu": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.44
+   },
+   "climb35|nominal": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.68
+   },
+   "climb35|box": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.24
+   },
+   "climb35|push05": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 20,
+    "dist_med": 1.39
+   },
+   "climb35|push10": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 21,
+    "dist_med": null
+   },
+   "climb35|ice": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.33
+   },
+   "climb35|weak": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.68
+   },
+   "climb35|heavy": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.68
+   },
+   "climb35|imu": {
+    "pass_": 2,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 1.45
+   },
+   "newton_walk_2000|nominal": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 5.69
+   },
+   "newton_walk_2000|box": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 5.5
+   },
+   "newton_walk_2000|push05": {
+    "pass_": 16,
+    "n": 21,
+    "fell": 5,
+    "dist_med": 5.41
+   },
+   "newton_walk_2000|push10": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 21,
+    "dist_med": null
+   },
+   "newton_walk_2000|ice": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 4.54
+   },
+   "newton_walk_2000|weak": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 5.71
+   },
+   "newton_walk_2000|heavy": {
+    "pass_": 5,
+    "n": 21,
+    "fell": 16,
+    "dist_med": 3.4
+   },
+   "newton_walk_2000|imu": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 5.6
+   },
+   "newton_latency_2000|nominal": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 5.46
+   },
+   "newton_latency_2000|box": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 0.83
+   },
+   "newton_latency_2000|push05": {
+    "pass_": 6,
+    "n": 21,
+    "fell": 15,
+    "dist_med": 6.01
+   },
+   "newton_latency_2000|push10": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 21,
+    "dist_med": null
+   },
+   "newton_latency_2000|ice": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 0.58
+   },
+   "newton_latency_2000|weak": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 6.54
+   },
+   "newton_latency_2000|heavy": {
+    "pass_": 0,
+    "n": 21,
+    "fell": 21,
+    "dist_med": null
+   },
+   "newton_latency_2000|imu": {
+    "pass_": 21,
+    "n": 21,
+    "fell": 0,
+    "dist_med": 6.38
+   }
+  }
+ },
+ "floor": {
+  "box_nominal": {
+   "walk_2000|nominal": {
+    "pass_": 0,
+    "n": 16,
+    "fell": 16,
+    "dist_med": null
+   },
+   "rough_ft|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 6.57
+   },
+   "velstand|nominal": {
+    "pass_": 0,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.17
+   },
+   "climb35|nominal": {
+    "pass_": 0,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.28
+   },
+   "newton_walk_2000|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 5.49
+   },
+   "newton_latency_2000|nominal": {
+    "pass_": 1,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 0.91
+   }
+  },
+  "plane_nominal": {
+   "walk_2000|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 2.02
+   },
+   "rough_ft|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.71
+   },
+   "velstand|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.62
+   },
+   "climb35|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.68
+   },
+   "newton_walk_2000|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 5.69
+   },
+   "newton_latency_2000|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 5.46
+   }
+  },
+  "plane_heavy": {
+   "newton_walk_2000|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 5.69,
+    "t_fall": []
+   },
+   "newton_walk_2000|heavy": {
+    "pass_": 7,
+    "n": 16,
+    "fell": 9,
+    "dist_med": 3.33,
+    "t_fall": [
+     1.06,
+     1.1,
+     1.1,
+     1.14,
+     1.18,
+     1.26,
+     1.3,
+     1.94,
+     2.62
+    ]
+   },
+   "rough_ft|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.71,
+    "t_fall": []
+   },
+   "rough_ft|heavy": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.77,
+    "t_fall": []
+   }
+  },
+  "box_heavy": {
+   "newton_walk_2000|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 5.48,
+    "t_fall": []
+   },
+   "newton_walk_2000|heavy": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 3.38,
+    "t_fall": []
+   },
+   "rough_ft|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 6.36,
+    "t_fall": []
+   },
+   "rough_ft|heavy": {
+    "pass_": 0,
+    "n": 16,
+    "fell": 1,
+    "dist_med": 1.17,
+    "t_fall": [
+     4.54
+    ]
+   }
+  }
+ },
+ "push_cpu": {
+  "bam": "4/4",
+  "pd": "3/3"
  }
 }

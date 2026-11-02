@@ -179,6 +179,7 @@ put("ansA3", answer("ansA3", "A.3", "เทรนนานขึ้นไม่�
     "ข้อเสนอ 'บันไดขาขึ้น': mjlab มี BoxInvertedPyramidStairsTerrainCfg แต่ cfg ของ Pollen เอาออกเพราะ env_origin_z ติดลบทำให้เกิดใต้พื้น (ดูคอมเมนต์ใน microduck_velocity_env_cfg.py) — ต้องแก้จุดเกิดก่อน")
 
 exec(open(os.path.join(HERE, "gen6_applied.py")).read())
+exec(open(os.path.join(HERE, "gen6_applied2.py")).read())
 
 # ================================================================ challenge
 chal = [("ออกแบบโซนใหม่", "ไม้กระดก · ทางแคบซิกแซก · ลูกบอลกลิ้งขวาง — เพิ่มใน make_adventure.py แล้วแลกด่านกับทีมอื่น", "Newton อ่านด่านจาก MJCF เองอัตโนมัติ — กล่อง ทรงกระบอก บานพับ"),

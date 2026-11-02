@@ -45,6 +45,16 @@ README เดิมของ Pollen อยู่ที่ [`README.pollen.md`](R
 
 ToF ใช้ `newton.sensors.SensorTiledCamera` เป็นกล้อง depth 8×8 มุม 45° วางที่ site `tof` บนหัวเป็ด + noise ตาม [`sim/tof.py`](src/mjlab_microduck/sim/tof.py) ของ Pollen — เรนเดอร์ทุก world ในครั้งเดียว
 
+| | |
+|---|---|
+| [![32 ducks dead-reckoning a square](docs/course/odom_gyro.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-odometry-gyro.mp4)<br>**ไม่มี GPS** · [`newton_odom.py`](newton_port/newton_odom.py) · 32 ตัวเดินสี่เหลี่ยมตาม “ตำแหน่งที่คิดว่าอยู่” | [![1,008 ducks QA battery](docs/course/qa_1008.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-qa-1008-ducks.mp4)<br>**QA 1,008 ตัวใน 7.6 s** · [`newton_qa.py`](newton_port/newton_qa.py) · 6 policy × 8 การทดสอบ |
+
+![QA pass-rate matrix](docs/course/qa_matrix.png)
+
+- **ไม่มี GPS (18 ม.)**: นับจากคำสั่งคลาด 0.92 ม. (ทุกตัวผิดทางเดียวกัน) · + gyro 0.41 ม. (กระจายตาม bias) · gyro สมบูรณ์ยังคลาด 0.42 ม. เพราะเป็ดเคลื่อนที่ตอนหมุนกับที่
+- **พื้น plane กับพื้นกล่องให้ผลกลับข้าง**: walk_2000 บนกล่องล้ม 16/16 · newton_walk แบก 200 g บน plane ล้ม 9/16 แต่บนกล่องผ่าน 16/16 — mesh ของเท้าชนกล่องด้วย CCD ไม่ใช่สูตร mesh-plane และ terrain Rough ของ mjlab เป็นกล่องทั้งหมด
+- **ยังไม่รู้สาเหตุ**: ผลัก 1.0 m/s ใน Newton ล้มทุก policy แต่ใน MuJoCo CPU velstand รอด (ทั้ง BAM และ PD) — ไม่ใช่มอเตอร์ / iterations / ชนิดพื้น
+
 ## เริ่มรัน
 
 ```bash
@@ -93,12 +103,14 @@ path ในสคริปต์ยังอ้าง `~/repos/microduck_rl` แ
 - `ViewerGL` เลื่อน world ไปวางเป็นตารางเอง → `viewer.set_world_offsets((0, 0, 0))` เมื่อฟิสิกส์จัดวางเองแล้ว
 - `SolverMuJoCo` บังคับให้ทุก world มี shape เท่ากัน — เลนที่ไม่มีพัสดุก็ต้องมีกล่องซ่อนไว้
 - body จาก MJCF ล็อก inertia → `add_shape_*` ไม่เพิ่มมวล ต้องแก้ `body_mass` / `body_com` / `body_inertia` เอง
+- ตั้งค่าต่อ world (μ, แรงบิด, มวล, ตำแหน่งพื้น) ได้โดยแก้ array ของ `Model` **ก่อน** สร้าง `SolverMuJoCo` · พื้นต่อ world ใช้ `add_shape_plane` ใน builder ก่อน `replicate`
+- เท้าเป็นมีช เดินบน plane กับกล่องได้ผลต่างกันมาก — เลือกพื้นให้ตรงกับที่ policy เทรนมา
 
 ## โครง repo
 
 | ที่ | อะไร |
 |---|---|
-| `newton_port/` | ทุกอย่างที่เป็น Newton: ตัวรัน, Duck Adventure, ส่งพัสดุ (`newton_delivery.py`), ToF (`newton_tof.py`), Isaac Lab task, แปลง ONNX ↔ npz |
+| `newton_port/` | ทุกอย่างที่เป็น Newton: ตัวรัน, Duck Adventure, ส่งพัสดุ, ToF, odometry, QA 1,008 ตัว, Isaac Lab task, แปลง ONNX ↔ npz |
 | `playground/` | ฝั่ง MuJoCo CPU: แอปควบคุม (`ctl_*.py`), ด่าน, `sim_play.py` (`--live` = เล่นเองด้วยคีย์บอร์ด), system ID มอเตอร์ |
 | `course/` | README หลักสูตร + ตัวสร้างสไลด์และผลวัด (`course/slides/results*.json`) |
 | `src/`, `scripts/` | โค้ดเดิมของ Pollen — แก้บรรทัดเดียว: env `MICRODUCK_STAIR_MAX` ใน `microduck_velocity_env_cfg.py` |

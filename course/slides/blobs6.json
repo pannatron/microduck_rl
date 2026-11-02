@@ -23,5 +23,13 @@
  "tvid_tof": "c03b06b73f8cf902286705ba1807c7be",
  "tstill_tof": "df9c0174febb2ca52be58a6fd60b56d7",
  "tvid_cliff": "6767e185992568977bbdd85ed26df96f",
- "tstill_cliff": "65da81461e15dbff77d5d855ad7cb1f1"
+ "tstill_cliff": "65da81461e15dbff77d5d855ad7cb1f1",
+ "odom_scatter": "0f2f8b241a27729903f6ec9c7a709f40",
+ "ostill_cmd": "a3eb0772d2c8d0a4c08a75753d90c865",
+ "ostill_gyro": "9f5d33a8549759a5cf7055fa49eae7ca",
+ "ovid_cmd": "0aa6705b321cb60ccd4cb0e35167a1f1",
+ "ovid_gyro": "ec617797c5f5c9dc0fcffc9185d57c5b",
+ "qa_matrix": "c56d8264fd8c10cff20495ccdefcf11c",
+ "qstill": "04ce21fba38fda151d604cb6275b7826",
+ "qvid": "3013322f2fe09118903bbcf87800f78c"
 }
