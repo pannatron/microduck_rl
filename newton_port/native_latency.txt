@@ -1,0 +1,16 @@
+newton_latency_2000 0.1 bam 0.051 -0.060
+newton_latency_2000 0.1 nobam 0.119 -0.167
+newton_latency_2000 0.2 bam 0.237 -0.156
+newton_latency_2000 0.2 nobam 0.289 -0.151
+newton_latency_2000 0.3 bam 0.400 -0.061
+newton_latency_2000 0.3 nobam 0.450 -0.026
+newton_latency_2000 0.4 bam 0.534 -0.041
+newton_latency_2000 0.4 nobam 0.324 0.658
+newton_walk_2000 0.1 bam 0.130 0.163
+newton_walk_2000 0.1 nobam 0.152 0.071
+newton_walk_2000 0.2 bam 0.259 0.087
+newton_walk_2000 0.2 nobam 0.250 0.006
+newton_walk_2000 0.3 bam 0.278 -0.038
+newton_walk_2000 0.3 nobam 0.256 0.056
+newton_walk_2000 0.4 bam 0.297 0.049
+newton_walk_2000 0.4 nobam 0.028 0.054

@@ -1,0 +1,312 @@
+{
+ "climb35_adv10": {
+  "n": 4,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   3,
+   3,
+   4,
+   22
+  ],
+  "best_cp": 3,
+  "reached": [
+   "CP2",
+   "CP3",
+   "CP2",
+   "CP2"
+  ],
+  "end_x": [
+   3.98,
+   5.42,
+   3.99,
+   3.97
+  ]
+ },
+ "newton_walk_2000_adv10": {
+  "n": 4,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   62,
+   64,
+   67,
+   70
+  ],
+  "best_cp": 4,
+  "reached": [
+   "CP4",
+   "CP4",
+   "CP4",
+   "CP4"
+  ],
+  "end_x": [
+   6.24,
+   6.77,
+   6.46,
+   6.69
+  ]
+ },
+ "rough_ft_adv10": {
+  "n": 4,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   11,
+   12,
+   12,
+   13
+  ],
+  "best_cp": 4,
+  "reached": [
+   "CP4",
+   "CP4",
+   "CP2",
+   "CP4"
+  ],
+  "end_x": [
+   6.47,
+   6.82,
+   3.9,
+   6.76
+  ]
+ },
+ "velstand_adv10": {
+  "n": 4,
+  "finished": 4,
+  "times": [
+   110.8,
+   115.4,
+   129.5,
+   140.0
+  ],
+  "falls": [
+   0,
+   1,
+   2,
+   5
+  ],
+  "best_cp": 5,
+  "reached": [
+   "FINISH",
+   "FINISH",
+   "FINISH",
+   "FINISH"
+  ],
+  "end_x": [
+   7.34,
+   7.77,
+   7.35,
+   7.68
+  ]
+ },
+ "walk_2000_adv10": {
+  "n": 4,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   1,
+   2,
+   5,
+   12
+  ],
+  "best_cp": 0,
+  "reached": [
+   "START",
+   "START",
+   "START",
+   "START"
+  ],
+  "end_x": [
+   0.64,
+   0.65,
+   0.65,
+   0.65
+  ]
+ },
+ "climb35_adv20": {
+  "n": 2,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   40,
+   42
+  ],
+  "best_cp": 2,
+  "reached": [
+   "CP2",
+   "CP2"
+  ],
+  "end_x": [
+   4.1,
+   3.85
+  ]
+ },
+ "newton_walk_2000_adv20": {
+  "n": 2,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   97,
+   98
+  ],
+  "best_cp": 2,
+  "reached": [
+   "CP2",
+   "CP2"
+  ],
+  "end_x": [
+   3.92,
+   4.06
+  ]
+ },
+ "rough_ft_adv20": {
+  "n": 2,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   50,
+   51
+  ],
+  "best_cp": 2,
+  "reached": [
+   "CP2",
+   "CP2"
+  ],
+  "end_x": [
+   3.92,
+   3.98
+  ]
+ },
+ "velstand_adv20": {
+  "n": 2,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   11,
+   13
+  ],
+  "best_cp": 2,
+  "reached": [
+   "CP2",
+   "CP2"
+  ],
+  "end_x": [
+   3.97,
+   4.27
+  ]
+ },
+ "walk_2000_adv20": {
+  "n": 2,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   1,
+   18
+  ],
+  "best_cp": 0,
+  "reached": [
+   "START",
+   "START"
+  ],
+  "end_x": [
+   0.64,
+   0.65
+  ]
+ },
+ "climb35_adv30": {
+  "n": 2,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   33,
+   39
+  ],
+  "best_cp": 2,
+  "reached": [
+   "CP2",
+   "CP2"
+  ],
+  "end_x": [
+   3.88,
+   4.04
+  ]
+ },
+ "newton_walk_2000_adv30": {
+  "n": 2,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   96,
+   98
+  ],
+  "best_cp": 2,
+  "reached": [
+   "CP2",
+   "CP2"
+  ],
+  "end_x": [
+   4.04,
+   4.0
+  ]
+ },
+ "rough_ft_adv30": {
+  "n": 2,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   48,
+   49
+  ],
+  "best_cp": 2,
+  "reached": [
+   "CP2",
+   "CP2"
+  ],
+  "end_x": [
+   3.92,
+   3.9
+  ]
+ },
+ "velstand_adv30": {
+  "n": 2,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   15,
+   22
+  ],
+  "best_cp": 2,
+  "reached": [
+   "CP2",
+   "CP2"
+  ],
+  "end_x": [
+   3.95,
+   3.9
+  ]
+ },
+ "walk_2000_adv30": {
+  "n": 2,
+  "finished": 0,
+  "times": [],
+  "falls": [
+   5,
+   34
+  ],
+  "best_cp": 0,
+  "reached": [
+   "START",
+   "START"
+  ],
+  "end_x": [
+   0.64,
+   0.63
+  ]
+ },
+ "meta": {
+  "N": 10,
+  "wall_s": 148.0,
+  "sim_s": 180.0
+ }
+}

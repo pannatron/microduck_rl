@@ -17,6 +17,7 @@ gait/feet terms, curriculum-ramped action-rate smoothing), with:
 """
 
 import math
+import os
 from copy import deepcopy
 
 NUM_STEPS_PER_ENV = 24
@@ -133,7 +134,7 @@ MICRODUCK_ROUGH_TERRAINS_CFG = TerrainGeneratorCfg(
         "flat": terrain_gen.BoxFlatTerrainCfg(proportion=0.25),
         "pyramid_stairs": terrain_gen.BoxPyramidStairsTerrainCfg(
             proportion=0.25,
-            step_height_range=(0.0, 0.015),  # max 1.5 cm (vs 10 cm default)
+            step_height_range=(0.0, float(os.environ.get("MICRODUCK_STAIR_MAX", "0.015"))),  # max 1.5 cm (vs 10 cm default); env override for the climb exercise
             step_width=0.15,
             platform_width=2.0,
             border_width=1.0,

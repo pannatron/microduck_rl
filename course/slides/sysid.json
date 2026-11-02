@@ -1,0 +1,58 @@
+{
+ "bam": {
+  "nominal": {
+   "rise_90_ms": null,
+   "overshoot_deg": 0.0,
+   "final_err_deg": 6.32
+  },
+  "vin_6.5": {
+   "rise_90_ms": null,
+   "overshoot_deg": 0.0,
+   "final_err_deg": 8.51
+  },
+  "vin_8.2": {
+   "rise_90_ms": 225,
+   "overshoot_deg": 0.0,
+   "final_err_deg": 5.42
+  },
+  "mass_0.05": {
+   "rise_90_ms": 220,
+   "overshoot_deg": 0.0,
+   "final_err_deg": 3.8
+  },
+  "mass_0.25": {
+   "rise_90_ms": null,
+   "overshoot_deg": 0.0,
+   "final_err_deg": 11.97
+  }
+ },
+ "fit": {
+  "kp": 0.695,
+  "kd": 0.0779,
+  "torque_limit": 0.793,
+  "rmse_deg": 1.19,
+  "rise_90_ms": 300,
+  "overshoot_deg": 0.0,
+  "final_err_deg": 7.19
+ },
+ "pd_ref": {
+  "newton_isaaclab": {
+   "rise_90_ms": null,
+   "overshoot_deg": 0.0,
+   "final_err_deg": 8.88,
+   "rmse_vs_bam_deg": 6.89
+  },
+  "mjcf_duck": {
+   "rise_90_ms": 210,
+   "overshoot_deg": 0.0,
+   "final_err_deg": 8.85,
+   "rmse_vs_bam_deg": 2.75
+  },
+  "mjcf_testbench": {
+   "rise_90_ms": 260,
+   "overshoot_deg": 0.0,
+   "final_err_deg": 11.87,
+   "rmse_vs_bam_deg": 4.08
+  }
+ }
+}

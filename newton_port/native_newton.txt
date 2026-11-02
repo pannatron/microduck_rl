@@ -1,0 +1,10 @@
+newton_walk_2000 0.1 bam 0.131 0.169
+newton_walk_2000 0.1 nobam 0.153 0.070
+newton_walk_2000 0.25 bam 0.278 -0.019
+newton_walk_2000 0.25 nobam 0.255 0.000
+newton_walk_2000 0.2 bam 0.258 0.062
+newton_walk_2000 0.2 nobam 0.251 0.011
+newton_walk_2000 0.3 bam 0.277 -0.043
+newton_walk_2000 0.3 nobam 0.258 0.065
+newton_walk_2000 0.4 bam 0.288 0.087
+newton_walk_2000 0.4 nobam 0.002 0.026
