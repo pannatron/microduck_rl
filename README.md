@@ -30,6 +30,21 @@ README เดิมของ Pollen อยู่ที่ [`README.pollen.md`](R
 
 วิดีโอเต็มทุกคลิป (รวมฝั่ง MuJoCo ไว้เทียบ) อยู่ใน [release `course-v1`](https://github.com/pannatron/microduck_rl/releases/tag/course-v1)
 
+## งานประยุกต์บน Newton
+
+| | |
+|---|---|
+| [![sprint over 20 mm stairs](docs/course/newton_sprint.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-sprint-20mm.mp4)<br>**แก้ด่านโดยไม่เทรนใหม่** · สั่ง 0.6 m/s เฉพาะช่วงบันได → ข้าม 20 mm ได้ 22/64 เลน (จาก 6/64) | [![delivery with 300 g parcel](docs/course/delivery_300g.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-delivery-rough_ft-300g.mp4)<br>**ส่งพัสดุในอพาร์ตเมนต์ของ Pollen** · [`newton_delivery.py`](newton_port/newton_delivery.py) · พัสดุ 0–400 g × 3 เส้นทาง |
+| [![ToF obstacle-only falls into stairwell](docs/course/tof_hole.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-tof-falls-into-stairwell.mp4)<br>**ToF 8×8 ของเป็ดจริงบน Newton** · ดูแค่สิ่งกีดขวาง → ตกช่องบันได | [![ToF with cliff check](docs/course/tof_cliff.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-tof-cliff-check.mp4)<br>**+ ตรวจพื้น (cliff)** · [`newton_tof.py`](newton_port/newton_tof.py) · ล้มจาก 7/8 เหลือ 1/8 |
+
+| งาน | ผลวัด |
+|---|---|
+| ส่งพัสดุ ≤ 200 g | `newton_walk_2000` ส่งครบ 12/12 ใน 15–20 s · 300 g ส่งได้ 4/12 |
+| ส่งพัสดุ 300–400 g | มีแค่ `rough_ft` ที่ส่งครบ 12/12 (~47 s) |
+| ToF: เดินไม่รู้ตำแหน่ง 180 s | blind ล้ม 15/16 · ToF ล้ม 12/16 (ตกช่องบันได 8) · ToF + cliff ล้ม 4/16 |
+
+ToF ใช้ `newton.sensors.SensorTiledCamera` เป็นกล้อง depth 8×8 มุม 45° วางที่ site `tof` บนหัวเป็ด + noise ตาม [`sim/tof.py`](src/mjlab_microduck/sim/tof.py) ของ Pollen — เรนเดอร์ทุก world ในครั้งเดียว
+
 ## เริ่มรัน
 
 ```bash
@@ -76,12 +91,14 @@ path ในสคริปต์ยังอ้าง `~/repos/microduck_rl` แ
 - PD ใน Isaac Lab มี kd 0.053 แต่ position actuator ใน MJCF มี kv 0 → ต้องใส่ `--pd-kd 0.053` ไม่งั้นเป็ดช้าลงและล้ม
 - body ที่มี joint ต้องใช้ `add_link()` ไม่ใช่ `add_body()` (แถม free joint) · `joint_target_q` เป็น layout แบบ coord
 - `ViewerGL` เลื่อน world ไปวางเป็นตารางเอง → `viewer.set_world_offsets((0, 0, 0))` เมื่อฟิสิกส์จัดวางเองแล้ว
+- `SolverMuJoCo` บังคับให้ทุก world มี shape เท่ากัน — เลนที่ไม่มีพัสดุก็ต้องมีกล่องซ่อนไว้
+- body จาก MJCF ล็อก inertia → `add_shape_*` ไม่เพิ่มมวล ต้องแก้ `body_mass` / `body_com` / `body_inertia` เอง
 
 ## โครง repo
 
 | ที่ | อะไร |
 |---|---|
-| `newton_port/` | ทุกอย่างที่เป็น Newton: ตัวรัน, Isaac Lab task, แปลง ONNX ↔ npz, ตัวเทียบ contact/sensor |
+| `newton_port/` | ทุกอย่างที่เป็น Newton: ตัวรัน, Duck Adventure, ส่งพัสดุ (`newton_delivery.py`), ToF (`newton_tof.py`), Isaac Lab task, แปลง ONNX ↔ npz |
 | `playground/` | ฝั่ง MuJoCo CPU: แอปควบคุม (`ctl_*.py`), ด่าน, `sim_play.py` (`--live` = เล่นเองด้วยคีย์บอร์ด), system ID มอเตอร์ |
 | `course/` | README หลักสูตร + ตัวสร้างสไลด์และผลวัด (`course/slides/results*.json`) |
 | `src/`, `scripts/` | โค้ดเดิมของ Pollen — แก้บรรทัดเดียว: env `MICRODUCK_STAIR_MAX` ใน `microduck_velocity_env_cfg.py` |

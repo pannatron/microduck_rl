@@ -11,5 +11,17 @@
  "nstill_climb": "93f17ecdb98151e7dcc3206c44cae746",
  "nvid_race": "6285ab0e645ba5340bce67f4dc022c8e",
  "nvid_vel": "727324c7be5f287d50244b0903371781",
- "nvid_climb": "fac3b8e051ba349e5c0f6bfd37347531"
+ "nvid_climb": "fac3b8e051ba349e5c0f6bfd37347531",
+ "nvid_sprint": "0476eb84cc423be9f82fca7f4b817c46",
+ "nstill_sprint": "936cc6c239dd25f4e8eabf615b14a69e",
+ "dvid_top": "2147fe4d811186f626d4f122b54ca940",
+ "apt_top": "807882350baa47ee552f9a0471d6dcc1",
+ "dvid_rough300": "a18f9858a740f03fa280ea115dd43b17",
+ "dstill_rough300": "803dfd5da7e9548d38a8290fd0334bc1",
+ "dvid_nw300": "394c81a346e53893ce33812c2cb3dfc4",
+ "dstill_nw300": "bc0aee62792e9d2e69baf148eafc5d5c",
+ "tvid_tof": "c03b06b73f8cf902286705ba1807c7be",
+ "tstill_tof": "df9c0174febb2ca52be58a6fd60b56d7",
+ "tvid_cliff": "6767e185992568977bbdd85ed26df96f",
+ "tstill_cliff": "65da81461e15dbff77d5d855ad7cb1f1"
 }

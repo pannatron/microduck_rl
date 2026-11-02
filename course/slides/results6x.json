@@ -1,0 +1,204 @@
+{
+ "sprint_0.3": {
+  "n": 64,
+  "fin": 6,
+  "past": 11,
+  "t_med": 159.8,
+  "t_min": 78.5,
+  "falls_med": 20
+ },
+ "sprint_0.6": {
+  "n": 64,
+  "fin": 22,
+  "past": 26,
+  "t_med": 144.4,
+  "t_min": 75.3,
+  "falls_med": 44
+ },
+ "sprint_0.45": {
+  "n": 16,
+  "fin": 1
+ },
+ "sprint_0.75": {
+  "n": 16,
+  "fin": 4
+ },
+ "sprint_0.9": {
+  "n": 16,
+  "fin": 5
+ },
+ "adv10_none": {
+  "n": 16,
+  "fin": 14,
+  "t_med": 115.0
+ },
+ "adv10_0.6": {
+  "n": 16,
+  "fin": 14,
+  "t_med": 73.0
+ },
+ "delivery": {
+  "newton_walk_2000@0": {
+   "ok": 12,
+   "n": 12,
+   "fell": 0,
+   "t_med": 15.2,
+   "J_m": 19.0
+  },
+  "newton_walk_2000@100": {
+   "ok": 12,
+   "n": 12,
+   "fell": 0,
+   "t_med": 16.3,
+   "J_m": 18.4
+  },
+  "newton_walk_2000@200": {
+   "ok": 12,
+   "n": 12,
+   "fell": 0,
+   "t_med": 19.5,
+   "J_m": 19.9
+  },
+  "newton_walk_2000@300": {
+   "ok": 4,
+   "n": 12,
+   "fell": 8,
+   "t_med": 22.6,
+   "J_m": 22.0
+  },
+  "newton_walk_2000@400": {
+   "ok": 0,
+   "n": 12,
+   "fell": 12,
+   "t_med": null,
+   "J_m": null
+  },
+  "rough_ft@0": {
+   "ok": 8,
+   "n": 12,
+   "fell": 4,
+   "t_med": 30.3,
+   "J_m": 15.1
+  },
+  "rough_ft@100": {
+   "ok": 12,
+   "n": 12,
+   "fell": 0,
+   "t_med": 51.4,
+   "J_m": 13.1
+  },
+  "rough_ft@200": {
+   "ok": 12,
+   "n": 12,
+   "fell": 0,
+   "t_med": 49.0,
+   "J_m": 12.8
+  },
+  "rough_ft@300": {
+   "ok": 12,
+   "n": 12,
+   "fell": 0,
+   "t_med": 47.0,
+   "J_m": 12.1
+  },
+  "rough_ft@400": {
+   "ok": 12,
+   "n": 12,
+   "fell": 0,
+   "t_med": 48.9,
+   "J_m": 12.4
+  },
+  "velstand@0": {
+   "ok": 7,
+   "n": 12,
+   "fell": 5,
+   "t_med": 78.2,
+   "J_m": 23.3
+  },
+  "velstand@100": {
+   "ok": 12,
+   "n": 12,
+   "fell": 0,
+   "t_med": 70.1,
+   "J_m": 15.6
+  },
+  "velstand@200": {
+   "ok": 11,
+   "n": 12,
+   "fell": 1,
+   "t_med": 62.8,
+   "J_m": 13.7
+  },
+  "velstand@300": {
+   "ok": 6,
+   "n": 12,
+   "fell": 6,
+   "t_med": 63.8,
+   "J_m": 13.1
+  },
+  "velstand@400": {
+   "ok": 0,
+   "n": 12,
+   "fell": 12,
+   "t_med": null,
+   "J_m": null
+  }
+ },
+ "routes": {
+  "kitchen_bedroom": 4.77,
+  "kitchen_office": 6.81,
+  "living_bath": 4.65
+ },
+ "tof_wall_s_living": 43.2,
+ "tof_wall_s_corridor": 41.7,
+ "tof": {
+  "living_blind": {
+   "n": 8,
+   "fell": 8,
+   "hole": 0,
+   "rooms": 1.4,
+   "dist": 5.1,
+   "stuck": 7.4
+  },
+  "living_tof": {
+   "n": 8,
+   "fell": 5,
+   "hole": 3,
+   "rooms": 1.8,
+   "dist": 20.7,
+   "stuck": 7.1
+  },
+  "living_tof_cliff": {
+   "n": 8,
+   "fell": 3,
+   "hole": 3,
+   "rooms": 2.1,
+   "dist": 20.6,
+   "stuck": 8.6
+  },
+  "corridor_blind": {
+   "n": 8,
+   "fell": 7,
+   "hole": 1,
+   "rooms": 1.4,
+   "dist": 3.3,
+   "stuck": 7.1
+  },
+  "corridor_tof": {
+   "n": 8,
+   "fell": 7,
+   "hole": 5,
+   "rooms": 2.2,
+   "dist": 14.5,
+   "stuck": 4.8
+  },
+  "corridor_tof_cliff": {
+   "n": 8,
+   "fell": 1,
+   "hole": 0,
+   "rooms": 2.6,
+   "dist": 26.0,
+   "stuck": 11.2
+  }
+ }
+}

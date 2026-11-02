@@ -21,6 +21,8 @@ ap.add_argument("--lane", type=float, default=1.3)         # ระยะห่�
 ap.add_argument("--noise", type=float, default=0.03)
 ap.add_argument("--pd-kd", dest="pd_kd", type=float, default=0.053)   # ค่าที่ตรงกับตอนเทรน (บทเรียนสัปดาห์ 6)
 ap.add_argument("--vx", type=float, default=0.4); ap.add_argument("--vslow", type=float, default=0.3); ap.add_argument("--wzmin", type=float, default=0.5)
+ap.add_argument("--vstairs", type=float, default=None)   # ความเร็วเฉพาะช่วงขึ้นบันได (ค่าเริ่มต้น = vslow)
+# เลนแบบสลับท่าตามโซน: "rough_ft+velstand@mountain" = ใช้ rough_ft ทั้งด่าน ยกเว้นช่วงภูเขา (ตีนบันได → ปลายทางลาด) ใช้ velstand
 ap.add_argument("--video", default=None); ap.add_argument("--video-every", type=int, default=5)
 ap.add_argument("--cam", default="overview")              # overview | follow:<lane> | x,y,z,pitch,yaw
 ap.add_argument("--res", default="1280x720")
@@ -28,24 +30,32 @@ ap.add_argument("--out", default=None)
 a = ap.parse_args()
 dev = "cuda:0"
 RULES = json.load(open(f"{ROBOT}scene_{a.level}.json"))
-POL = a.policies.split(",")
+POL = a.policies.split(",")                     # ชื่อเลน (spec) ตามลำดับ
 N = len(POL) * a.per
 
-# ---------------------------------------------------------------- policies (MLP ใน torch, หลายตัวในรอบเดียว)
+# ---------------------------------------------------------------- policies (MLP ใน torch) + การสลับตามโซน
+def parse(spec):
+    if "+" not in spec: return spec, spec, None
+    base, rest = spec.split("+"); alt, zone = rest.split("@"); return base, alt, zone
+LANES = [parse(s) for s in POL]
+NAMES = sorted({n for b, al, _ in LANES for n in (b, al)})
 nets = []
-for name in POL:
+for name in NAMES:
     P = np.load(os.path.join(HERE, name + ".npz")); T = lambda k: torch.tensor(P[k], device=dev)
     nets.append(dict(mean=T("mean")[0], std=T("std")[0], layers=[(T(f"w{k}"), T(f"b{k}")) for k in range(4)], default=T("default_pose")))
 default = nets[0]["default"]
+base_idx = torch.tensor([NAMES.index(LANES[i // a.per][0]) for i in range(N)], device=dev)
+alt_idx = torch.tensor([NAMES.index(LANES[i // a.per][1]) for i in range(N)], device=dev)
+active = base_idx.clone()                       # policy ที่คุมเลนนั้นอยู่ตอนนี้ (อัปเดตทุก step ตามโซน)
 def policy(obs):
-    out = torch.empty(N, 14, device=dev)
-    for i, n in enumerate(nets):
-        sl = slice(i * a.per, (i + 1) * a.per); x = (obs[sl] - n["mean"]) / n["std"]
+    outs = []
+    for n in nets:
+        x = (obs - n["mean"]) / n["std"]
         for k, (w, b) in enumerate(n["layers"]):
             x = x @ w.T + b
             if k < 3: x = torch.nn.functional.elu(x)
-        out[sl] = x
-    return out
+        outs.append(x)
+    return torch.stack(outs)[active, torch.arange(N, device=dev)]
 
 # ---------------------------------------------------------------- ด่าน: อ่าน geom ทุกชิ้นที่ไม่ใช่ตัวเป็ดจาก MJCF
 mj = mujoco.MjModel.from_xml_path(f"{ROBOT}scene_{a.level}.xml")
@@ -189,7 +199,12 @@ def game(t, bq):
     herr = torch.atan2(torch.sin(torch.atan2(tv[:, 1], tv[:, 0]) - yaw), torch.cos(torch.atan2(tv[:, 1], tv[:, 0]) - yaw))
     slow = torch.zeros(N, dtype=torch.bool, device=dev)
     for lo, hi in RULES["slow"]: slow |= (p[:, 0] >= lo) & (p[:, 0] <= hi)
-    v = torch.where(slow, a.vslow, a.vx) * torch.cos(herr).clamp(min=0) * (herr.abs() < 1.0)
+    climb = (p[:, 0] >= RULES["stairs"][0] - 0.3) & (p[:, 0] <= RULES["stairs"][1])          # ตีนบันได → ยอด
+    vset = torch.where(slow, a.vslow, a.vx)
+    if a.vstairs is not None: vset = torch.where(climb, a.vstairs, vset)
+    v = vset * torch.cos(herr).clamp(min=0) * (herr.abs() < 1.0)
+    mountain = (p[:, 0] >= RULES["stairs"][0] - 0.3) & (p[:, 0] <= RULES["ramp_end"])       # ตีนบันได → ปลายทางลาด
+    active[:] = torch.where(mountain, alt_idx, base_idx)
     wz = (2.5 * herr).clamp(-1, 1); wz = torch.where(herr.abs() > 0.08, torch.sign(herr) * torch.maximum(wz.abs(), torch.tensor(a.wzmin, device=dev)), wz)
     cmd[:, 0] = torch.where(run, v, 0.0); cmd[:, 2] = torch.where(run, wz, 0.0)
 
