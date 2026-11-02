@@ -27,7 +27,7 @@ ap.add_argument("--per", type=int, default=4)
 ap.add_argument("--secs", type=float, default=120)
 ap.add_argument("--lane", type=float, default=7.0)        # ห้องชุดกว้าง 6 ม. ในแกน y
 ap.add_argument("--noise", type=float, default=0.03)
-ap.add_argument("--pd-kd", dest="pd_kd", type=float, default=0.053)
+ap.add_argument("--pd-kd", dest="pd_kd", type=float, default=None)   # None = ตามที่เทรน (ดู kd_for)
 ap.add_argument("--vx", type=float, default=0.3); ap.add_argument("--wzmin", type=float, default=0.5)
 ap.add_argument("--goal-r", type=float, default=0.25)
 ap.add_argument("--video", default=None); ap.add_argument("--video-every", type=int, default=5)
@@ -36,6 +36,10 @@ ap.add_argument("--res", default="1280x720")
 ap.add_argument("--out", default=None)
 a = ap.parse_args()
 dev = "cuda:0"
+# kd ของ PD ต้องตรงกับตอนเทรน: Newton นำเข้า damping 0.053 จาก MJCF อยู่แล้ว
+#   policy ที่เทรนบน mjlab (walk_2000, rough_ft, velstand, climb35 …) เห็น damping รวม 0.053 → D-gain เพิ่ม 0
+#   policy ที่เทรนบน Isaac Lab + Newton (newton_*) เห็น DelayedPD kd 0.053 + damping → D-gain 0.053
+def kd_for(name, override): return override if override is not None else (0.053 if name.startswith("newton_") else 0.0)
 MS = MISSIONS[a.mission]
 POL = a.policies.split(","); PAY = [float(v) for v in a.payloads.split(",")]
 GROUPS = [(p, g) for p in POL for g in PAY]                 # กลุ่มละ a.per เลน
@@ -99,7 +103,7 @@ for i in range(N):                      # แต่ละเลนน้ำห�
     duck.add_mjcf(f"{ROBOT}robot_groundcontact.xml", floating=True, parse_visuals=True, enable_self_collisions=False)
     nd_duck, nq_duck = duck.joint_dof_count, duck.joint_coord_count
     for j in range(6, nd_duck):
-        duck.joint_effort_limit[j] = 0.96; duck.joint_target_kd[j] = a.pd_kd
+        duck.joint_effort_limit[j] = 0.96; duck.joint_target_kd[j] = kd_for(GROUPS[i // a.per][0], a.pd_kd)
     duck.joint_q[0:7] = [MS["start"][0], MS["start"][1], 0.13, 0, 0, math.sin(h0 / 2), math.cos(h0 / 2)]
     duck.joint_q[7:nq_duck] = default.cpu().tolist()
     TQ = slice(7, nq_duck) if len(duck.joint_target_q) == duck.joint_coord_count else slice(6, nd_duck)
@@ -134,6 +138,7 @@ tgt[:, TQ] = default
 ke_all = wp.to_torch(model.joint_target_ke).view(N, -1)
 KE = ke_all[:, TQ] if ke_all.shape[1] == NQ else ke_all[:, 6:nd_duck]          # kp ของ PD ต่อข้อต่อ
 trunk = torch.arange(N, device=dev) * NB
+KD_LANE = torch.tensor([kd_for(GROUPS[i // a.per][0], a.pd_kd) for i in range(N)], device=dev)
 origin = wp.to_torch(s0.body_q)[trunk][:, :2].clone() - torch.tensor(MS["start"], device=dev)
 SUB, dt = 4, 0.005
 
@@ -218,7 +223,7 @@ with torch.no_grad():
         act = policy(obs); last = act
         tgt[:, TQ] = default + act
         q, qd = Q(s0)[:, 7:nq_duck], QD(s0)[:, 6:nd_duck]
-        tau = (KE * (tgt[:, TQ] - q) - a.pd_kd * qd).clamp(-0.96, 0.96)        # แรงบิดที่ PD สั่งจริง (ประมาณจาก state ต้น step)
+        tau = (KE * (tgt[:, TQ] - q) - KD_LANE[:, None] * qd).clamp(-0.96, 0.96)        # แรงบิดที่ PD สั่งจริง (ประมาณจาก state ต้น step)
         work += torch.where(state == 0, (tau * qd).abs().sum(1) * 0.02, 0.0)
         wp.capture_launch(graph)
         if viewer is not None and k % a.video_every == 0:

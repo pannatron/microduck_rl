@@ -25,7 +25,7 @@ README เดิมของ Pollen อยู่ที่ [`README.pollen.md`](R
 | | |
 |---|---|
 | [![1,024 ducks on one GPU](docs/course/newton_crowd.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/m6-newton-crowd-1024.mp4)<br>**เป็ด 1,024 ตัวบน GPU เดียว** · `newton_duck.py --video` | [![latency DR comparison](docs/course/newton_latency.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/m6-latency-dr-compare.mp4)<br>**Latency DR** · ซ้าย: ไม่มี DR ล้มเมื่อหน่วงเต็ม · ขวา: มี DR เดินต่อได้ |
-| [![velstand finishing the course](docs/course/newton_follow_finish.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/adv-newton-velstand-10mm.mp4)<br>**velstand เข้าเส้นชัย** ด่าน 10 mm · กล้องตาม `--cam follow:4` | [![climb35 falling on 20 mm stairs](docs/course/newton_climb20.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/adv-newton-climb35-20mm.mp4)<br>**climb35 ล้มที่บันได 20 mm** · ยกเท้าได้แค่ ~1 ซม. |
+| [![walk_2000 finishing the course](docs/course/newton_follow_finish.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/adv-newton-walk_2000-10mm.mp4)<br>**walk_2000 เข้าเส้นชัย** ด่าน 10 mm · กล้องตาม `--cam follow:4` | [![climb35 falling on 20 mm stairs](docs/course/newton_climb20.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/adv-newton-climb35-20mm.mp4)<br>**climb35 ล้มที่บันได 20 mm** · ยกเท้าได้แค่ ~1 ซม. |
 | [![head tracking while walking](docs/course/newton_head.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/w8-head-tracking.mp4)<br>**หันหัวตามเป้าขณะเดิน** · policy ท่าใหม่ที่เทรนบน Newton | [![10 lanes at the start](docs/course/adventure_lanes.png)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/adv-newton-race-10-lanes.mp4)<br>**ด่าน 10 ชุด = 10 world** · `scene.replicate()` |
 
 วิดีโอเต็มทุกคลิป (รวมฝั่ง MuJoCo ไว้เทียบ) อยู่ใน [release `course-v1`](https://github.com/pannatron/microduck_rl/releases/tag/course-v1)
@@ -34,13 +34,13 @@ README เดิมของ Pollen อยู่ที่ [`README.pollen.md`](R
 
 | | |
 |---|---|
-| [![sprint over 20 mm stairs](docs/course/newton_sprint.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-sprint-20mm.mp4)<br>**แก้ด่านโดยไม่เทรนใหม่** · สั่ง 0.6 m/s เฉพาะช่วงบันได → ข้าม 20 mm ได้ 22/64 เลน (จาก 6/64) | [![delivery with 300 g parcel](docs/course/delivery_300g.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-delivery-rough_ft-300g.mp4)<br>**ส่งพัสดุในอพาร์ตเมนต์ของ Pollen** · [`newton_delivery.py`](newton_port/newton_delivery.py) · พัสดุ 0–400 g × 3 เส้นทาง |
+| [![sprint over 20 mm stairs](docs/course/newton_sprint.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-sprint-20mm.mp4)<br>**แก้ด่านโดยไม่เทรนใหม่** · สั่ง 0.6 m/s เฉพาะช่วงบันได → ข้าม 20 mm ได้ 52/64 เลน (จาก 25/64) | [![delivery with 300 g parcel](docs/course/delivery_300g.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-delivery-rough_ft-300g.mp4)<br>**ส่งพัสดุในอพาร์ตเมนต์ของ Pollen** · [`newton_delivery.py`](newton_port/newton_delivery.py) · พัสดุ 0–400 g × 3 เส้นทาง |
 | [![ToF obstacle-only falls into stairwell](docs/course/tof_hole.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-tof-falls-into-stairwell.mp4)<br>**ToF 8×8 ของเป็ดจริงบน Newton** · ดูแค่สิ่งกีดขวาง → ตกช่องบันได | [![ToF with cliff check](docs/course/tof_cliff.gif)](https://github.com/pannatron/microduck_rl/releases/download/course-v1/app-tof-cliff-check.mp4)<br>**+ ตรวจพื้น (cliff)** · [`newton_tof.py`](newton_port/newton_tof.py) · ล้มจาก 7/8 เหลือ 1/8 |
 
 | งาน | ผลวัด |
 |---|---|
 | ส่งพัสดุ ≤ 200 g | `newton_walk_2000` ส่งครบ 12/12 ใน 15–20 s · 300 g ส่งได้ 4/12 |
-| ส่งพัสดุ 300–400 g | มีแค่ `rough_ft` ที่ส่งครบ 12/12 (~47 s) |
+| ส่งพัสดุ 300–400 g | `rough_ft` ส่งครบ 12/12 ทุกน้ำหนัก (34–40 s) · velstand ครบถึง 300 g แต่ช้ากว่า |
 | ToF: เดินไม่รู้ตำแหน่ง 180 s | blind ล้ม 15/16 · ToF ล้ม 12/16 (ตกช่องบันได 8) · ToF + cliff ล้ม 4/16 |
 
 ToF ใช้ `newton.sensors.SensorTiledCamera` เป็นกล้อง depth 8×8 มุม 45° วางที่ site `tof` บนหัวเป็ด + noise ตาม [`sim/tof.py`](src/mjlab_microduck/sim/tof.py) ของ Pollen — เรนเดอร์ทุก world ในครั้งเดียว
@@ -52,8 +52,8 @@ ToF ใช้ `newton.sensors.SensorTiledCamera` เป็นกล้อง dep
 ![QA pass-rate matrix](docs/course/qa_matrix.png)
 
 - **ไม่มี GPS (18 ม.)**: นับจากคำสั่งคลาด 0.92 ม. (ทุกตัวผิดทางเดียวกัน) · + gyro 0.41 ม. (กระจายตาม bias) · gyro สมบูรณ์ยังคลาด 0.42 ม. เพราะเป็ดเคลื่อนที่ตอนหมุนกับที่
-- **พื้น plane กับพื้นกล่องให้ผลกลับข้าง**: walk_2000 บนกล่องล้ม 16/16 · newton_walk แบก 200 g บน plane ล้ม 9/16 แต่บนกล่องผ่าน 16/16 — mesh ของเท้าชนกล่องด้วย CCD ไม่ใช่สูตร mesh-plane และ terrain Rough ของ mjlab เป็นกล่องทั้งหมด
-- **ยังไม่รู้สาเหตุ**: ผลัก 1.0 m/s ใน Newton ล้มทุก policy แต่ใน MuJoCo CPU velstand รอด (ทั้ง BAM และ PD) — ไม่ใช่มอเตอร์ / iterations / ชนิดพื้น
+- **พื้น plane กับพื้นกล่องให้ผลต่างกัน**: newton_walk แบก 200 g บน plane ล้ม 9/16 แต่บนกล่องผ่าน 16/16 · velstand บนกล่องช้าลงจนไม่ผ่านเกณฑ์ — สมมติฐาน: mesh ของเท้าชนกล่องด้วย CCD ไม่ใช่สูตร mesh-plane (terrain Rough ของ mjlab เป็นกล่องทั้งหมด)
+- **damping ซ้อนสองชั้น (แก้แล้ว)**: Newton นำเข้า damping 0.053 จาก MJCF อยู่แล้ว การใส่ D-gain 0.053 ซ้ำทำให้ policy จาก mjlab ช้าลงและล้มง่าย (ผลัก 0.5 m/s ล้ม 12/16 → 0–2/16 เมื่อแก้) · ผลัก 1.0 m/s ทั้ง Newton และ MuJoCo CPU ล้มเหมือนกัน — velstand ลุกกลับได้ทุกตัว (`playground/ctl_pushtrack.py` จับล้มระหว่างทาง ไม่ใช่ดูแค่ตอนจบ)
 
 ## เริ่มรัน
 
@@ -68,7 +68,7 @@ gh release download course-v1 -R pannatron/microduck_rl -p "*.npz"  -D newton_po
 
 # 3) Newton อยู่ใน venv ของ Isaac Lab (~/IsaacLab, backend Newton ไม่ต้องมี Isaac Sim)
 cd ~/IsaacLab
-.venv/bin/python ~/repos/microduck_rl/newton_port/newton_duck.py --policy newton_walk_2000 --cmds 0.2,0.3,0.4 --per-cmd 16 --pd-kd 0.053
+.venv/bin/python ~/repos/microduck_rl/newton_port/newton_duck.py --policy newton_walk_2000 --cmds 0.2,0.3,0.4 --per-cmd 16 --pd-kd 0.053   # policy จาก mjlab ใช้ --pd-kd 0
 .venv/bin/python ~/repos/microduck_rl/newton_port/newton_adventure.py --level adv10 \
     --policies walk_2000,rough_ft,newton_walk_2000 --per 2 --video /tmp/frames --cam overview
 
@@ -86,25 +86,26 @@ path ในสคริปต์ยังอ้าง `~/repos/microduck_rl` แ
 
 | policy | Newton ด่าน 10 mm (4 เลน) | MuJoCo CPU + BAM ด่าน 10 mm |
 |---|---|---|
-| velstand (Pollen) | เข้าเส้น 4/4 · 111–140 s | ค้างหน้าบันไดขั้นที่ 2 |
-| rough_ft | ถึง CP4 ล้มที่ประตู | เข้าเส้น 128 s |
-| newton_walk_2000 (เทรนบน Newton) | ถึง CP4 ล้ม 62–70 ครั้ง | — |
-| climb35 (บันได ≤ 3.5 cm) | ติดที่ภูเขา | เข้าเส้น 130 s |
+| walk_2000 | เข้าเส้น 2/4 · 98–107 s | ถึง CP4 ล้มที่ประตู |
+| velstand (Pollen) | หยุดหน้าบันได 4/4 (ไม่ล้ม) | ค้างหน้าบันไดขั้นที่ 2 |
+| rough_ft | เข้าเส้น 2/4 · 173–176 s | เข้าเส้น 128 s |
+| newton_walk_2000 (เทรนบน Newton) | ถึง CP4 ล้ม 63–79 ครั้ง | — |
+| climb35 (บันได ≤ 3.5 cm) | เข้าเส้น 2/4 · 114–151 s | เข้าเส้น 130 s |
 
-บันได 20 mm ไม่มีใครผ่านบน Newton — `climb35` ยกเท้าได้แค่ ~1.06 cm ตลอดการเทรน
+บันได 20 mm ไม่มีใครผ่านที่ความเร็วปกติ — velstand ผ่านได้ 81% เมื่อสั่ง 0.6 m/s เฉพาะช่วงบันได · `climb35` ยกเท้าได้แค่ ~1.06 cm ตลอดการเทรน
 
 ## Gotchas ของ Newton ที่เจอจริง
 
 - `SolverMuJoCo` เท่านั้นที่เสถียร — Featherstone / XPBD / semi-implicit ได้ NaN กับเป็ด (contact kd 100 แข็งเกิน)
 - `njmax` / `nconmax` ของ `SolverMuJoCo` เป็นค่า **ต่อ world** — คูณจำนวน world เองแล้วจะ OOM
 - `body_qd` = `[lin, ang]` ใน world frame · `mj_step` คำนวณ sensor ก่อน integrate → gyro ช้า 1 substep (`--sensor-lag 1`)
-- PD ใน Isaac Lab มี kd 0.053 แต่ position actuator ใน MJCF มี kv 0 → ต้องใส่ `--pd-kd 0.053` ไม่งั้นเป็ดช้าลงและล้ม
+- **D-gain ต้องตรงกับที่เทรน**: Newton นำเข้า joint damping 0.053 จาก MJCF แล้ว → policy จาก mjlab ใช้ D-gain 0 · policy ที่เทรนบน Isaac Lab + Newton (`newton_*`) ใช้ 0.053 — ตัวรันเลือกให้เองตาม `kd_for()`
 - body ที่มี joint ต้องใช้ `add_link()` ไม่ใช่ `add_body()` (แถม free joint) · `joint_target_q` เป็น layout แบบ coord
 - `ViewerGL` เลื่อน world ไปวางเป็นตารางเอง → `viewer.set_world_offsets((0, 0, 0))` เมื่อฟิสิกส์จัดวางเองแล้ว
 - `SolverMuJoCo` บังคับให้ทุก world มี shape เท่ากัน — เลนที่ไม่มีพัสดุก็ต้องมีกล่องซ่อนไว้
 - body จาก MJCF ล็อก inertia → `add_shape_*` ไม่เพิ่มมวล ต้องแก้ `body_mass` / `body_com` / `body_inertia` เอง
 - ตั้งค่าต่อ world (μ, แรงบิด, มวล, ตำแหน่งพื้น) ได้โดยแก้ array ของ `Model` **ก่อน** สร้าง `SolverMuJoCo` · พื้นต่อ world ใช้ `add_shape_plane` ใน builder ก่อน `replicate`
-- เท้าเป็นมีช เดินบน plane กับกล่องได้ผลต่างกันมาก — เลือกพื้นให้ตรงกับที่ policy เทรนมา
+- เท้าเป็น mesh เดินบน plane กับกล่องได้ผลต่างกัน — เลือกพื้นให้ตรงกับที่ policy เทรนมา
 
 ## โครง repo
 

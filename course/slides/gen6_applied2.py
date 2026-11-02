@@ -35,27 +35,28 @@ put("exA8", slide("exA8", head("Exercise A.8 · QA before release", "ทดส�
     at=2), "μ 0.3 และมอเตอร์ ×0.85 ไม่ทำให้ใครล้มเลย จึงใช้ค่าที่หนักขึ้น · ตรวจแล้วว่าการตั้งค่าต่อ world มีผลจริง: μ 0.02 และ ×0.2 ทำให้ล้มทุกตัว")
 
 nw, rf, vs = "newton_walk_2000", "rough_ft", "velstand"
+QU = lambda p, t: QC[f"{p}|{t}"]["up_end"]
 put("ansA8", answer("ansA8", "A.8", "ไม่มี policy ไหนผ่านครบ — ตารางนี้คือรายงานก่อนปล่อย",
-    [f"<b>newton_walk</b> ผ่านมากสุด (ปกติ, พื้นกล่อง, ลื่น, มอเตอร์อ่อน, IMU noise ครบ 21/21) แต่<b>แบก 200 g ผ่านแค่ {qa(nw, 'heavy')[0]}/21</b>",
-     f"<b>walk_2000</b> ล้มบนพื้นกล่องทุกตัว ({qa('walk_2000', 'box')[2]}/21) ทั้งที่พื้นเรียบเหมือนกัน — ดูหน้าถัดไป",
-     f"<b>rough_ft</b> ทนแบกของและมอเตอร์อ่อน แต่พื้นลื่นเดินไม่ไป ({qa(rf, 'ice')[0]}/21) · velstand/climb35 ไม่ล้มแต่ช้ากว่าเกณฑ์ในหลายการทดสอบ",
-     f"ผลัก 1.0 m/s ล้ม<b>ทุกตัวทุก policy</b> แต่บน MuJoCo CPU velstand รอดผลัก 3 ครั้ง (BAM {X['push_cpu']['bam']}, PD {X['push_cpu']['pd']}) — ไม่ใช่มอเตอร์ ไม่ใช่ iterations ไม่ใช่ชนิดพื้น · <b>ยังไม่รู้สาเหตุ</b>"],
+    [f"<b>rough_ft</b> ผ่านมากสุด (21/21 ทุกข้อ ยกเว้นผลัก) · <b>climb35</b> ใกล้เคียง · <b>walk_2000</b> พลาดที่พื้นลื่น ({qa('walk_2000', 'ice')[0]}/21)",
+     f"<b>newton_walk</b> แบก 200 g ล้ม {qa(nw, 'heavy')[2]}/21 · <b>newton_latency</b> ผลัก 0.5 ล้ม {qa('newton_latency_2000', 'push05')[2]}/21 — ตัวที่เทรนบน Newton ทนแรงรบกวนน้อยกว่า",
+     f"ผลัก 1.0 m/s ล้มเกือบทุกตัว แต่ <b>velstand ลุกกลับมายืนได้ทุกตัว</b> ({QU(vs, 'push10')}/21) ตัวอื่นแทบไม่ลุก · บน MuJoCo CPU velstand ก็ล้มแล้วลุก 6/6",
+     f"velstand ไม่ล้มแต่ <b>ช้ากว่าเกณฑ์</b> บนพื้นกล่องและตอนแบกของ ({qa(vs, 'box')[0]}/21, {qa(vs, 'heavy')[0]}/21)"],
     side=f'<img src="{I("qa_matrix")}" alt="Pass-rate heatmap of six policies across eight QA tests" style="width:1000px;height:467px;object-fit:contain;border-radius:16px">',
-    summary="QA ที่ดีบอกทั้ง “ผ่านไหม” และ “เชื่อผลได้แค่ไหน” — คอลัมน์ผลักต้องตรวจซ้ำบนซิมอื่นก่อน", side_w=1000),
-    "1,008 world · 20 s ต่อตัว · ใช้เวลาจริง 7.6 s บน RTX 3060 Laptop · ผลักแบบตั้งความเร็วแนวนอนของลำตัวทับ (แบบ push_by_setting_velocity ของ mjlab) ที่ 5, 10, 15 s ทิศสุ่ม · ตรวจแล้วว่า joint_qd[0] คือความเร็วเชิงเส้น x")
+    summary="QA ที่ดีแยก “ล้ม” “ช้า” และ “ล้มแล้วลุกได้” ออกจากกัน — ผ่าน/ไม่ผ่านอย่างเดียวซ่อนความต่างไว้", side_w=1000),
+    "1,008 world · 20 s ต่อตัว · 7.6 s บน RTX 3060 Laptop · D-gain ตามที่เทรนต่อ world · ผลักแบบตั้งความเร็วแนวนอนของลำตัวทับ ที่ 5, 10, 15 s ทิศสุ่ม · รุ่นแรกของหน้านี้ (damping ซ้อน) เคยพบว่าทุกตัวล้มที่ผลัก 0.5 และคิดว่า Newton ต่างจาก MuJoCo — ต้นเหตุจริงคือ damping ซ้อน + เกณฑ์ “ล้ม” ที่ไม่เท่ากัน")
 
 FL = X["floor"]
 def fc(d, k): c = d[k]; return f"{c['pass_']}/{c['n']}" + (f" · ล้ม {c['fell']}" if c["fell"] else "") + (f" · {c['dist_med']} ม." if c.get("dist_med") else "")
-put("floor", slide("floor", head("บทเรียนจาก QA", "พื้นเรียบเท่ากัน แต่ plane กับกล่องให้ผลกลับข้าง"),
+put("floor", slide("floor", head("บทเรียนจาก QA", "พื้น plane กับพื้นกล่อง: เรียบเท่ากัน แต่ผลไม่เท่ากัน"),
     row=[f'<div style="flex:1;display:flex;flex-direction:column;gap:20px">'
-         + table([["walk_2000 · ปกติ", fc(FL["plane_nominal"], "walk_2000|nominal"), fc(FL["box_nominal"], "walk_2000|nominal")],
-                  ["rough_ft · ปกติ", fc(FL["plane_nominal"], "rough_ft|nominal"), fc(FL["box_nominal"], "rough_ft|nominal")],
-                  ["newton_walk · แบก 200 g", fc(FL["plane_heavy"], "newton_walk_2000|heavy"), fc(FL["box_heavy"], "newton_walk_2000|heavy")],
-                  ["rough_ft · แบก 200 g", fc(FL["plane_heavy"], "rough_ft|heavy"), fc(FL["box_heavy"], "rough_ft|heavy")]],
-                 ["16 ตัวต่อช่อง", "พื้น plane", "พื้นกล่อง"], size=30)
-         + p("ผ่าน · ล้ม · ระยะมัธยฐานใน 20 s", 24, "#4A5563") + '</div>',
+         + table([["newton_walk · แบก 200 g", fc(FL["plane"], "newton_walk_2000|heavy"), fc(FL["box"], "newton_walk_2000|heavy")],
+                  ["velstand · ปกติ", fc(FL["plane"], "velstand|nominal"), fc(FL["box"], "velstand|nominal")],
+                  ["velstand · แบก 200 g", fc(FL["plane"], "velstand|heavy"), fc(FL["box"], "velstand|heavy")],
+                  ["rough_ft · แบก 200 g", fc(FL["plane"], "rough_ft|heavy"), fc(FL["box"], "rough_ft|heavy")],
+                  ["walk_2000 · ปกติ", fc(FL["plane"], "walk_2000|nominal"), fc(FL["box"], "walk_2000|nominal")]],
+                 ["16 ตัวต่อช่อง", "พื้น plane", "พื้นกล่อง"], size=28)
+         + p("ผ่าน · ล้ม · ระยะมัธยฐานใน 20 s (ผ่าน = ไม่ล้ม + ≥ 1.5 ม.)", 24, "#4A5563") + '</div>',
          f'<div style="width:620px;display:flex;flex-direction:column;gap:18px">'
-         + card("สมมติฐาน", p("เท้าเป็ดเป็น mesh — ชน plane ด้วยสูตร mesh-plane แต่ชนกล่องด้วย CCD (Newton โหลด kernel CCD เฉพาะตอนมีกล่อง) — ยังไม่ได้นับจุดสัมผัสตอนเดิน", 25)
-                + p("Rough ของ mjlab เป็นกล่องทั้งหมด · Flat ใช้ plane → policy คุ้นกับพื้นที่เทรนมา", 25))
-         + card("กระทบอะไรบ้าง", p("A.5–A.6 (พื้นอพาร์ตเมนต์) และบันได/หินใน Duck Adventure — จริงสำหรับพื้นแบบนั้นเท่านั้น", 25, "#8A4300")) + '</div>'],
-    at=1), "MuJoCo CPU ให้ 1 จุดสัมผัสต่อเท้าทั้งบน plane และกล่อง (ตอนยืน) — ความต่างนี้เกิดใน MuJoCo-Warp/Newton · ตรวจด้วย plane แยกต่อ world แล้วได้ผลเท่า ground plane ร่วม จึงไม่ใช่เรื่องการแยก world")
+         + card("สมมติฐาน", p("เท้าเป็ดเป็น mesh — ชน plane ด้วยสูตร mesh-plane แต่ชนกล่องด้วย CCD (Newton โหลด kernel CCD เฉพาะตอนมีกล่อง) · Rough ของ mjlab เป็นกล่องทั้งหมด Flat ใช้ plane", 25))
+         + card("แก้ตัว", p("รุ่นแรกบอกว่า walk_2000 ล้มบนกล่องทุกตัว — นั่นมาจาก damping ซ้อน หลังแก้ walk_2000 ผ่านทั้งสองพื้น · ความต่างที่เหลือคือความเร็ว และ newton_walk ตอนแบกของ", 25, "#8A4300")) + '</div>'],
+    at=1), "A.5–A.6 วัดบนพื้นกล่อง (อพาร์ตเมนต์) และบันได/หินใน Duck Adventure เป็นกล่อง — ผลจริงสำหรับพื้นแบบนั้น · MuJoCo CPU ให้ 1 จุดสัมผัสต่อเท้าทั้งบน plane และกล่อง (ตอนยืน)")

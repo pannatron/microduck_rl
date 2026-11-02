@@ -98,29 +98,29 @@ put("exA1", slide("exA1", head("Exercise A.1 · Race", "ด่าน 10 mm: poli
                "จด: เข้าเส้นกี่เลน เวลา จำนวนล้ม checkpoint ไกลสุด",
                "ดู end_x ของเลนที่ไม่ถึง แล้วบอกว่าติดโซนไหน",
                "ทำนายก่อนรัน: policy ที่เทรนบน Newton จะได้เปรียบไหม?"]),
-         f'<div style="width:900px;display:flex;flex-direction:column">' + vid("nstill_vel", "nvid_vel", "Follow camera on velstand finishing the 10 mm course in Newton", 900, 506) + '</div>'],
-    at=2), "วิดีโอ: เลน velstand บนด่าน 10 mm กล้องตาม เร่ง 4 เท่า แถบบนแสดงเวลาในซิม checkpoint และจำนวนล้มของเลนนี้")
+         f'<div style="width:900px;display:flex;flex-direction:column">' + vid("nstill_follow", "nvid_follow", "Follow camera on walk_2000 finishing the 10 mm course in Newton", 900, 506) + '</div>'],
+    at=2), "วิดีโอ: เลน walk_2000 บนด่าน 10 mm กล้องตาม เร่ง 4 เท่า — เข้าเส้นใน 130 s · แถบบนแสดงเวลาในซิม checkpoint และจำนวนล้มของเลนนี้")
 
 nv, nr, nw, nc, nn = (N[f"{k}_adv10"] for k in ("velstand", "rough_ft", "walk_2000", "climb35", "newton_walk_2000"))
-put("ansA1", answer("ansA1", "A.1", "มีตัวเดียวที่เข้าเส้น และไม่ใช่ตัวที่คาด",
-    [f"<b>velstand</b> เข้าเส้นครบ {nv['finished']}/{nv['n']} เลน ({nv['times'][0]:.0f}–{nv['times'][-1]:.0f} s) ล้มแค่ {nv['falls'][0]}–{nv['falls'][-1]} ครั้ง — ผลต่างกันทุกรอบ ต้องรายงานเป็นช่วง",
-     f"<b>rough_ft</b> กับ <b>newton_walk</b> ถึง CP4 แต่ตายที่ประตู (end_x ≈ 6.2–6.8 ม.) — newton_walk ล้ม {nn['falls'][0]}–{nn['falls'][-1]} ครั้ง: เทรนบน Newton ก็ไม่ช่วยถ้าไม่เคยเจอพื้นขรุขระหรือแรงผลัก",
-     f"<b>walk_2000</b> ไม่ผ่านกรวยแรก — ค้างที่ x = {nw['end_x'][0]:.2f} ม. ชนกรวย (y 0.10) แล้วดันอยู่อย่างนั้น · เป็ดตัวนี้เลี้ยวซ้ายเองอยู่แล้ว (Module 1)",
-     f"<b>climb35</b> ติดตีนภูเขา {sum(r == 'CP2' for r in nc['reached'])}/{nc['n']} เลน — เทรนบันไดสูงขึ้นแล้วกลับแย่กว่า rough_ft ต้นทาง (Ex A.3)"],
+put("ansA1", answer("ansA1", "A.1", "เข้าเส้น 3 policy — แต่ไม่มีตัวไหนครบทุกเลน",
+    [f"<b>walk_2000 · rough_ft · climb35</b> เข้าเส้นตัวละ 2/4 เลน — walk_2000 เร็วสุด ({nw['times'][0]:.0f}–{nw['times'][-1]:.0f} s) · เลนที่ไม่ถึงติดที่ทุ่งหินหรือประตู (CP4)",
+     f"<b>velstand</b> หยุดนิ่งหน้าขั้นแรกทุกเลน (x = {nv['end_x'][0]:.2f} ม.) ไม่ล้มเลย — เหมือนบน MuJoCo · คำสั่ง 0.3 m/s ไม่พอให้มันขึ้นบันได (ดู A.4)",
+     f"<b>newton_walk</b> (เทรนบน Newton) ถึง CP4 แต่ล้ม {nn['falls'][0]}–{nn['falls'][-1]} ครั้ง — เทรนบนซิมเดียวกันไม่ช่วย ถ้าไม่เคยเจอพื้นขรุขระหรือแรงผลัก",
+     "<b>แก้ตัว:</b> หน้านี้รุ่นแรกบอกว่า velstand ชนะคนเดียว — วัดตอนที่ damping ซ้อนสองชั้น (ดูหน้าบั๊ก) ตั้งให้ตรงกับตอนเทรนแล้วผลเปลี่ยน"],
     side=table([[n, ncell(k, "adv10")] for k, n, _ in POLS], ["policy", "Newton · 10 mm (4 เลน)"], size=30)
          + p("ช่วงเวลา = เลนที่เร็วสุด–ช้าสุด · CPx = checkpoint ไกลสุด · ‘ล้ม a–b’ = น้อยสุด–มากสุด", 24, "#4A5563"),
-    summary="ด่านหลายโซนแยก policy ได้ชัดกว่าด่านเดี่ยว — และ 4 เลนให้ผลไม่เท่ากัน รอบเดียวไม่พอ", side_w=820),
-    "ทุกเลนใช้ autopilot เดียวกัน ต่างกันที่ท่าเริ่มสุ่ม ±0.03 rad และความไม่แน่นอนของ GPU solver")
+    summary="ผลต่างกันทุกเลน ต้องรายงานเป็นช่วง — และตั้งค่าซิมให้ตรงกับตอนเทรนก่อนสรุปอะไร", side_w=820),
+    "ทุกเลนใช้ autopilot เดียวกัน ต่างกันที่ท่าเริ่มสุ่ม ±0.03 rad และความไม่แน่นอนของ GPU solver · D-gain: policy จาก mjlab = 0, จาก Newton = 0.053 (Newton นำเข้า damping 0.053 จาก MJCF อยู่แล้ว)")
 
 # ================================================================ MuJoCo vs Newton
-put("gap", slide("gap", head("sim-to-sim อีกรอบ", "ด่านเดียวกัน คนละซิม ผลกลับข้าง"),
+put("gap", slide("gap", head("sim-to-sim อีกรอบ", "ตั้งค่าให้ตรงกับตอนเทรน สองซิมก็ตรงกันขึ้น"),
     table([[n, mcell(k, "adv10"), ncell(k, "adv10")] for k, n, _ in POLS[:4]],
           ["policy (ด่าน 10 mm)", "MuJoCo CPU + BAM (1 รอบ)", "Newton + PD (4 เลน)"], size=29),
     f'<div style="flex:1;display:flex;flex-direction:row;gap:28px">'
-    + card("velstand", p("MuJoCo: ไม่ล้มเลยแต่<b>หยุดนิ่ง</b>หน้าขั้นที่ 2 · Newton: เข้าเส้นทุกเลน", 29))
-    + card("walk_2000", p("MuJoCo: ข้ามภูเขาได้ แพ้ประตู · Newton: ไม่ผ่านกรวยแรกด้วยซ้ำ", 29))
-    + card("ต่างกันตรงไหน", p("มอเตอร์ BAM vs PD · contact model · ประตูกับกรวยจำลองคนละแบบ — เหมือนสัปดาห์ 6 แต่ตอนนี้เห็นในเกม", 29)) + '</div>',
-    at=1), "MuJoCo CPU ใช้ infer_policy.py (BAM m6, contact นิ่มแบบ soft) · Newton ใช้ SolverMuJoCo + PD kd 0.053, contact ค่าเริ่มต้นของ Newton · ทั้งสองซิมใช้ด่านจาก MJCF ไฟล์เดียวกันและ autopilot ตรรกะเดียวกัน")
+    + card("ตรงกันแล้ว", p("velstand หยุดหน้าบันไดทั้งสองซิม ไม่ล้ม · rough_ft และ climb35 เข้าเส้นได้ทั้งสองซิม", 28))
+    + card("ยังต่าง", p("walk_2000: MuJoCo ล้มที่ประตู 43 ครั้ง · Newton เข้าเส้น 2/4 — ประตู/กรวยและมอเตอร์ (BAM vs PD) ยังจำลองคนละแบบ", 28))
+    + card("บทเรียน", p("รุ่นแรกของหน้านี้ผลกลับข้างทั้งหมด — ต้นเหตุคือ damping ซ้อนในซิมฝั่งเรา ไม่ใช่ตัวซิม", 28, "#8A4300")) + '</div>',
+    at=1), "MuJoCo CPU ใช้ infer_policy.py (BAM m6) · Newton ใช้ SolverMuJoCo + PD kp 0.55, damping MJCF 0.053 + D-gain ตามที่เทรน · ด่านจาก MJCF ไฟล์เดียวกันและ autopilot ตรรกะเดียวกัน")
 
 # ================================================================ Ex A.2 mountain
 put("exA2", slide("exA2", head("Exercise A.2 · How high?", "ภูเขา 10 → 20 → 30 mm: ใครยังปีนได้?", "A.2"),
@@ -135,7 +135,7 @@ put("exA2", slide("exA2", head("Exercise A.2 · How high?", "ภูเขา 10 
 put("ansA2", answer("ansA2", "A.2", "ขั้น 20 mm ไม่มีใครผ่านบน Newton",
     ["ที่ 20 และ 30 mm ทุก policy ติดที่ CP2 (ตีนภูเขา) ทุกเลน — ล้มตั้งแต่ขั้นแรก x ≈ 3.9–4.1 ม. เป็นขาขึ้นล้วน",
      f"velstand ล้มน้อยสุด ({N['velstand_adv20']['falls'][0]}–{N['velstand_adv20']['falls'][-1]} ครั้งที่ 20 mm) newton_walk ล้มมากสุด ({N['newton_walk_2000_adv20']['falls'][0]}+) — ล้มน้อยไม่ได้แปลว่าผ่าน",
-     f"บน MuJoCo + BAM มีแค่ velstand ที่ข้าม 20 mm ได้ ({M['velstand_adv20']['finish']:.0f} s, ล้ม {M['velstand_adv20']['falls']}) — ขอบเขต “ปีนได้” ขึ้นกับซิมด้วย",
+     f"บน MuJoCo + BAM มีแค่ velstand ที่ข้าม 20 mm ได้ ({M['velstand_adv20']['finish']:.0f} s) · บน Newton velstand ข้ามได้เมื่อ “วิ่งใส่” บันได (A.4)",
      "ขั้น 20 mm ≈ 2 เท่าของที่เป็ดยกเท้าตอนเดิน (~1 ซม. ดู Ex A.3) → จูนคำสั่งอย่างเดียวไม่พอ"],
     side=table([[n] + [ncell(k, lv) for lv, _ in LVS] for k, n, _ in POLS], ["Newton", "10 mm", "20 mm", "30 mm"], size=27)
          + p("10 mm = 4 เลน · 20/30 mm = 2 เลน · ทุกเลน 180 s", 24, "#4A5563"),
@@ -149,9 +149,10 @@ bugs = [["ทางลาดกลายเป็นหน้าผา", "robot 
         ["Newton: ประตูสร้างไม่ได้", "add_body() แถม free joint ซ้อนกับบานพับ", "ใช้ add_link()"],
         ["Newton: กล้องหาเป็ดไม่เจอ", "ViewerGL เลื่อน world ไปวางเป็นตารางเอง", "set_world_offsets((0,0,0))"],
         ["พัสดุ 300 g เวลาเท่าเดิมเป๊ะ", "MJCF ล็อก inertia — shape ใหม่ไม่เพิ่มมวล", "ใส่มวล/CoM/inertia ให้ trunk เอง"],
-        ["ส่งของไม่ถึงทั้งที่ไม่ล้ม", "เส้นทางเฉียดโต๊ะ console 2 ซม.", "ย้ายเส้นทางไปกลางทางเดิน"]]
-put("bugs", slide("bugs", head("ระหว่างสร้างเกม", "ด่านพังก่อนเป็ดพัง — 8 บั๊กที่เจอจริง"),
-    table(bugs, ["อาการ", "สาเหตุ", "แก้"], size=25),
+        ["ส่งของไม่ถึงทั้งที่ไม่ล้ม", "เส้นทางเฉียดโต๊ะ console 2 ซม.", "ย้ายเส้นทางไปกลางทางเดิน"],
+        ["<b>ผลกลับข้างไปมาระหว่างซิม</b>", "Newton นำเข้า damping 0.053 จาก MJCF แล้วเราใส่ D-gain ซ้ำอีก 0.053", "D-gain ตามที่เทรน: mjlab 0 · Newton 0.053"]]
+put("bugs", slide("bugs", head("ระหว่างสร้างเกม", "ด่านพังก่อนเป็ดพัง — 9 บั๊กที่เจอจริง"),
+    table(bugs, ["อาการ", "สาเหตุ", "แก้"], size=24),
     think("ทุกบั๊กดูเหมือน “policy แย่” ในตอนแรก — ล้มที่ทางลาด ไม่ถึงเส้นชัย ติดหน้าประตู · ก่อนโทษ policy ให้ตรวจด่านและกติกาก่อน: วัดพื้น ดูวิดีโอ ดูตำแหน่ง"),
     at=1), "ผลข้างเคียงของบั๊กประตู: เวอร์ชันประตูบานเดียว walk_2000 เข้าเส้นใน MuJoCo ได้ 43.5 s — พอเปลี่ยนเป็นประตูคู่กลับล้มที่ประตู · make_course.py slope= จาก Module 4 มีบั๊กเรเดียนเดียวกัน (แก้แล้ว ผลใน Module 4 ไม่ได้ใช้ทางลาด)")
 
@@ -169,7 +170,7 @@ put("exA3", slide("exA3", head("Exercise A.3 · Train a climber", "เทรน�
     at=2), "mjlab terrain_levels_vel: move_up = เดินไกลกว่า size/2 (4 ม.), move_down = เดินได้น้อยกว่าครึ่งของ |คำสั่ง|·20 s · TerrainGeneratorCfg.curriculum = False ใน MICRODUCK_ROUGH_TERRAINS_CFG")
 
 put("ansA3", answer("ansA3", "A.3", "เทรนนานขึ้นไม่ได้ทำให้ยกเท้าสูงขึ้น",
-    ["Newton: climb35 ไม่เข้าเส้นแม้แต่ 10 mm (ติด CP2–CP3) และติดตีนภูเขาที่ 20/30 mm เหมือนตัวอื่น",
+    [f"Newton: climb35 เข้าเส้น 10 mm {N['climb35_adv10']['finished']}/{N['climb35_adv10']['n']} เลน ({N['climb35_adv10']['times'][0]:.0f}–{N['climb35_adv10']['times'][-1]:.0f} s) พอ ๆ กับ rough_ft ต้นทาง · 20/30 mm ติดตีนภูเขาเหมือนตัวอื่น",
      f"MuJoCo + BAM: เข้าเส้น 10 mm ใน {M['climb_adv10']['finish']:.0f} s (ล้ม {M['climb_adv10']['falls']}) ใกล้ rough_ft ({M['rough_adv10']['finish']:.0f} s) · 20 mm ล้ม {M['climb_adv20']['falls']} ครั้ง ไม่ผ่าน",
      "ต้นเหตุใน log: <b>peak_height_mean ≈ 1.06 cm ตลอด 1,000 รอบ</b> (rough_ft ปลายรอบ 1.17 cm) — reward ตั้งเป้ายกเท้า 2 cm แต่เป็ดไม่เคยไปถึง จึงขึ้นขั้น 2 cm ไม่ได้",
      "สิ่งที่น่าลองต่อ: บันไดแบบขาขึ้น (เกิดในหลุม) · เพิ่มน้ำหนัก foot_swing_height · กฎเลื่อนขั้นที่ใช้ระยะสั้นลง"],
@@ -183,14 +184,14 @@ exec(open(os.path.join(HERE, "gen6_applied2.py")).read())
 
 # ================================================================ challenge
 chal = [("ออกแบบโซนใหม่", "ไม้กระดก · ทางแคบซิกแซก · ลูกบอลกลิ้งขวาง — เพิ่มใน make_adventure.py แล้วแลกด่านกับทีมอื่น", "Newton อ่านด่านจาก MJCF เองอัตโนมัติ — กล่อง ทรงกระบอก บานพับ"),
-        ("ทำลายสถิติ", "policy เดิม เปลี่ยนได้แค่ autopilot: ความเร็วแต่ละโซน เส้นทาง การสลับ policy", "A.4 ได้ 34% ที่ 20 mm — ใครทำได้เกิน 50% บน 64 เลน?"),
+        ("ทำลายสถิติ", "policy เดิม เปลี่ยนได้แค่ autopilot: ความเร็วแต่ละโซน เส้นทาง การสลับ policy", "A.4 ได้ 81% ที่ 20 mm — ใครทำ 64/64 ได้?"),
         ("ToF ไม่ตกหลุม", "แก้ tof_cliff ให้ไม่ตกช่องบันไดจากด้านข้าง แล้วไปให้ครบ 6 ห้อง", "ใบ้: ตรวจพื้นทุกคอลัมน์ ไม่ใช่แค่ 4 ช่องกลาง"),
         ]
-best = N["velstand_adv10"]["times"][0]
+best = N["walk_2000_adv10"]["times"][0]
 put("challenge", slide("challenge", head("Challenge", "แข่งกันทั้งห้อง บน Newton"),
     f'<div style="flex:1;display:flex;flex-direction:row;gap:28px">' + "".join(card(t, p(d, 30) + '<div style="flex:1"></div>' + p(k, 27, "#3D7A12")) for t, d, k in chal) + '</div>',
     table([["คะแนน", "เวลาในซิม · ไม่เข้าเส้น = เทียบ checkpoint ก่อน แล้วค่อยจำนวนล้ม · รายงานทุกเลน ไม่ใช่เลนที่ดีที่สุด"],
-           ["สถิติปัจจุบัน", f"10 mm: velstand {best:.0f} s · 20 mm: velstand + วิ่ง 0.6 m/s {X['sprint_0.6']['t_min']:.0f} s · 30 mm: ยังไม่มีใคร · ส่งพัสดุ 400 g: rough_ft"]],
+           ["สถิติปัจจุบัน", f"10 mm: walk_2000 {best:.0f} s (velstand + วิ่งบันได มัธยฐาน {X['adv10_0.6']['t_med']:.0f} s) · 20 mm: velstand + วิ่ง {X['sprint_0.6']['t_min']:.0f} s · 30 mm: ยังไม่มีใคร"]],
           ["", ""], size=27),
     at=1))
 

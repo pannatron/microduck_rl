@@ -19,7 +19,7 @@ ap.add_argument("--per", type=int, default=4)              # เลนต่อ 
 ap.add_argument("--secs", type=float, default=180)
 ap.add_argument("--lane", type=float, default=1.3)         # ระยะห่างเลน (ม.) — ด่านกว้าง ±0.5
 ap.add_argument("--noise", type=float, default=0.03)
-ap.add_argument("--pd-kd", dest="pd_kd", type=float, default=0.053)   # ค่าที่ตรงกับตอนเทรน (บทเรียนสัปดาห์ 6)
+ap.add_argument("--pd-kd", dest="pd_kd", type=float, default=None)   # None = ตามที่เทรน (ดู kd_for)
 ap.add_argument("--vx", type=float, default=0.4); ap.add_argument("--vslow", type=float, default=0.3); ap.add_argument("--wzmin", type=float, default=0.5)
 ap.add_argument("--vstairs", type=float, default=None)   # ความเร็วเฉพาะช่วงขึ้นบันได (ค่าเริ่มต้น = vslow)
 # เลนแบบสลับท่าตามโซน: "rough_ft+velstand@mountain" = ใช้ rough_ft ทั้งด่าน ยกเว้นช่วงภูเขา (ตีนบันได → ปลายทางลาด) ใช้ velstand
@@ -29,6 +29,10 @@ ap.add_argument("--res", default="1280x720")
 ap.add_argument("--out", default=None)
 a = ap.parse_args()
 dev = "cuda:0"
+# kd ของ PD ต้องตรงกับตอนเทรน: Newton นำเข้า damping 0.053 จาก MJCF อยู่แล้ว
+#   policy ที่เทรนบน mjlab (walk_2000, rough_ft, velstand, climb35 …) เห็น damping รวม 0.053 → D-gain เพิ่ม 0
+#   policy ที่เทรนบน Isaac Lab + Newton (newton_*) เห็น DelayedPD kd 0.053 + damping → D-gain 0.053
+def kd_for(name, override): return override if override is not None else (0.053 if name.startswith("newton_") else 0.0)
 RULES = json.load(open(f"{ROBOT}scene_{a.level}.json"))
 POL = a.policies.split(",")                     # ชื่อเลน (spec) ตามลำดับ
 N = len(POL) * a.per
@@ -67,7 +71,7 @@ duck = newton.ModelBuilder()
 duck.add_mjcf(f"{ROBOT}robot_groundcontact.xml", floating=True, parse_visuals=True, enable_self_collisions=False)
 nd_duck, nq_duck = duck.joint_dof_count, duck.joint_coord_count          # 20, 21
 for i in range(6, nd_duck):
-    duck.joint_effort_limit[i] = 0.96; duck.joint_target_kd[i] = a.pd_kd
+    duck.joint_effort_limit[i] = 0.96; duck.joint_target_kd[i] = 0.0
 duck.joint_q[0:7] = [0, 0, 0.125, 0, 0, 0, 1]
 duck.joint_q[7:nq_duck] = nets[0]["default"].cpu().tolist()
 TQ = slice(7, nq_duck) if len(duck.joint_target_q) == duck.joint_coord_count else slice(6, nd_duck)   # joint_target_q เป็น layout แบบ coord หรือ dof แล้วแต่รุ่น
@@ -107,6 +111,9 @@ scene = newton.ModelBuilder()
 scene.replicate(duck, N, spacing=(0.0, a.lane, 0.0))
 scene.add_ground_plane()
 model = scene.finalize(device=dev)
+kd_all = wp.to_torch(model.joint_target_kd).view(N, -1)              # D-gain ต่อเลน ตาม policy หลักของเลน (ดู kd_for)
+KS = slice(7, nq_duck) if kd_all.shape[1] == NQ else slice(6, nd_duck)
+kd_all[:, KS] = torch.tensor([kd_for(LANES[i // a.per][0], a.pd_kd) for i in range(N)], device=dev)[:, None]
 solver = newton.solvers.SolverMuJoCo(model, iterations=10, ls_iterations=50, integrator="euler", nconmax=160, njmax=600)
 s0, s1, ctrl = model.state(), model.state(), model.control()
 newton.eval_fk(model, model.joint_q, model.joint_qd, s0)

@@ -25,7 +25,7 @@ ap.add_argument("--tests", default="nominal,box,push05,push10,ice,weak,heavy,imu
 ap.add_argument("--reps", type=int, default=24)
 ap.add_argument("--secs", type=float, default=20)
 ap.add_argument("--vx", type=float, default=0.3)
-ap.add_argument("--pd-kd", dest="pd_kd", type=float, default=0.053)
+ap.add_argument("--pd-kd", dest="pd_kd", type=float, default=None)   # None = ตามที่เทรน (ดู kd_for)
 ap.add_argument("--noise", type=float, default=0.03)
 ap.add_argument("--video", default=None); ap.add_argument("--video-every", type=int, default=3); ap.add_argument("--res", default="1280x720")
 ap.add_argument("--cam", default="0,0,0,-30,45")
@@ -37,6 +37,10 @@ ap.add_argument("--tau", type=float, default=0.96)  # แรงบิดสู�
 ap.add_argument("--out", default=None)
 a = ap.parse_args()
 dev = "cuda:0"
+# kd ของ PD ต้องตรงกับตอนเทรน: Newton นำเข้า damping 0.053 จาก MJCF อยู่แล้ว
+#   policy ที่เทรนบน mjlab (walk_2000, rough_ft, velstand, climb35 …) เห็น damping รวม 0.053 → D-gain เพิ่ม 0
+#   policy ที่เทรนบน Isaac Lab + Newton (newton_*) เห็น DelayedPD kd 0.053 + damping → D-gain 0.053
+def kd_for(name, override): return override if override is not None else (0.053 if name.startswith("newton_") else 0.0)
 POL, TST = a.policies.split(","), a.tests.split(",")
 R = a.reps; N = len(POL) * len(TST) * R
 pol_of = torch.tensor([i // (len(TST) * R) for i in range(N)], device=dev)
@@ -63,7 +67,7 @@ duck = newton.ModelBuilder()
 duck.add_mjcf(XML, floating=True, parse_visuals=bool(a.video), enable_self_collisions=False)
 nd, nq = duck.joint_dof_count, duck.joint_coord_count
 for i in range(6, nd):
-    duck.joint_effort_limit[i] = a.tau; duck.joint_target_kd[i] = a.pd_kd
+    duck.joint_effort_limit[i] = a.tau; duck.joint_target_kd[i] = 0.0
     if a.kp is not None: duck.joint_target_ke[i] = a.kp
 duck.joint_q[0:7] = [0, 0, 0.125, 0, 0, 0, 1]; duck.joint_q[7:] = default.cpu().tolist()
 TQ = slice(7, nq) if len(duck.joint_target_q) == nq else slice(6, nd)
@@ -98,7 +102,11 @@ if len(hv):
     Ib = mp / 12 * torch.diag(torch.tensor([(2 * hy) ** 2 + (2 * hz) ** 2, (2 * hx) ** 2 + (2 * hz) ** 2, (2 * hx) ** 2 + (2 * hy) ** 2], device=dev))
     I = shift(bI[hv[0]].view(3, 3), m0, c0 - c) + shift(Ib, mp, cp - c)
     bm[hv] = m0 + mp; bim[hv] = 1 / (m0 + mp); bc[hv] = c; bI[hv] = I.flatten() if bI.dim() == 2 else I; biI[hv] = torch.linalg.inv(I).flatten() if biI.dim() == 2 else torch.linalg.inv(I)
-solver = newton.solvers.SolverMuJoCo(model, iterations=int(os.environ.get("ITERS", 10)), ls_iterations=50, integrator="euler", nconmax=int(os.environ.get("NCONMAX", 64)), njmax=int(os.environ.get("NJMAX", 256)))
+kd_all = wp.to_torch(model.joint_target_kd).view(N, -1)              # D-gain ต่อ world ตาม policy ของ world นั้น
+KS = slice(7, nq) if kd_all.shape[1] == nq else slice(6, nd)
+KD_LANE = torch.tensor([kd_for(POL[int(p)], a.pd_kd) for p in pol_of], device=dev)
+kd_all[:, KS] = KD_LANE[:, None]
+solver = newton.solvers.SolverMuJoCo(model, use_mujoco_cpu=os.environ.get("CPU") == "1", iterations=int(os.environ.get("ITERS", 10)), ls_iterations=50, integrator="euler", nconmax=int(os.environ.get("NCONMAX", 64)), njmax=int(os.environ.get("NJMAX", 256)))
 s0, s1, ctrl = model.state(), model.state(), model.control()
 newton.eval_fk(model, model.joint_q, model.joint_qd, s0)
 Q = lambda st: wp.to_torch(st.joint_q).view(N, nq); QD = lambda st: wp.to_torch(st.joint_qd).view(N, nd)
@@ -118,11 +126,13 @@ def physics():
         if i == SUB - 1: wp.copy(bqd_lag, s0.body_qd); wp.copy(bq_lag, s0.body_q)
         s0.clear_forces(); solver.step(s0, s1, ctrl, None, dt); s0, s1 = s1, s0
 q0 = Q(s0).clone(); physics()
-with wp.ScopedCapture() as cap: physics()
-graph = cap.graph
+graph = None
+if os.environ.get("CPU") != "1":                      # MuJoCo CPU (ตรวจไขว้) จับ CUDA graph ไม่ได้
+    with wp.ScopedCapture() as cap: physics()
+    graph = cap.graph
 Q(s0).copy_(q0); QD(s0).zero_(); newton.eval_fk(model, s0.joint_q, s0.joint_qd, s0)
 cmd = torch.zeros(N, 13, device=dev); last = torch.zeros(N, 14, device=dev)
-gen = torch.Generator(device=dev).manual_seed(5)
+gen = torch.Generator(device=dev).manual_seed(int(os.environ.get("SEED", 5)))
 imu_w = is_t("imu")
 def obs_now(k):
     bq = wp.to_torch(s0.body_q)[trunk]
@@ -134,6 +144,7 @@ def obs_now(k):
     return torch.cat([gyro, grav, Q(s0)[:, 7:] - default, QD(s0)[:, 6:], last, cmd], 1), bq
 
 push_mag = torch.where(is_t("push05"), 0.5, torch.where(is_t("push10"), 1.0, 0.0))
+min_up = torch.ones(N, device=dev); min_z = torch.full((N,), 1.0, device=dev)
 fell = torch.zeros(N, dtype=torch.bool, device=dev); t_fall = torch.full((N,), float("nan"), device=dev)
 p_start = None
 
@@ -164,14 +175,16 @@ with torch.no_grad():
             m = push_mag > 0
             QD(s0)[m, 0] = (push_mag * torch.cos(ang))[m]; QD(s0)[m, 1] = (push_mag * torch.sin(ang))[m]
         x, y = bq[:, 3], bq[:, 4]; tilted = ((1 - 2 * (x * x + y * y)) < 0.55) | (bq[:, 2] < 0.05)
+        if k > 50: min_up = torch.minimum(min_up, 1 - 2 * (x * x + y * y)); min_z = torch.minimum(min_z, bq[:, 2])
         newf = tilted & ~fell; fell |= tilted; t_fall[newf] = t
         obs[:, -13:] = cmd; act = policy(obs); last = act; tgt[:, TQ] = default + act
-        wp.capture_launch(graph)
+        wp.capture_launch(graph) if graph is not None else physics()
         if viewer is not None and k % a.video_every == 0:
             viewer.set_camera(wp.vec3(cx, cy, cz), cp_, cy_); viewer.begin_frame(t); viewer.log_state(s0); viewer.end_frame()
             Image.fromarray(viewer.get_frame().numpy()).save(f"{a.video}/f_{nf:04d}.png"); nf += 1
 torch.cuda.synchronize(); wall = time.time() - t0
 bq = wp.to_torch(s0.body_q)[trunk]; dist = (bq[:, :2] - p_start).norm(dim=1)
+up_end = (1 - 2 * (bq[:, 3] ** 2 + bq[:, 4] ** 2) > 0.8) & (bq[:, 2] > 0.08)   # ยืนอยู่ตอนจบ (เกณฑ์แบบ MuJoCo CPU test)
 ok = ~fell & (dist >= 1.5)
 res = dict(N=N, reps=R, sim_s=a.secs, wall_s=round(wall, 1), policies=POL, tests=TST, cells={})
 for i, pn in enumerate(POL):
@@ -179,7 +192,8 @@ for i, pn in enumerate(POL):
         m = (pol_of == i) & (tst_of == j)
         res["cells"][f"{pn}|{tn}"] = dict(pass_=int(ok[m].sum()), n=int(m.sum()), fell=int(fell[m].sum()),
                                           dist_med=round(float(dist[m & ~fell].median()), 2) if (m & ~fell).any() else None,
-                                          t_fall=sorted(round(float(v), 2) for v in t_fall[m & fell]))
+                                          t_fall=sorted(round(float(v), 2) for v in t_fall[m & fell]), up_end=int(up_end[m].sum()),
+                                          min_up=round(float(min_up[m].min()), 2), min_z=round(float(min_z[m].min()), 3))
 print(json.dumps(dict(N=N, wall_s=res["wall_s"])))
 for pn in POL: print(f"{pn:22s}", " ".join(f"{res['cells'][f'{pn}|{tn}']['pass_']:3d}" for tn in TST))
 if a.out: json.dump(res, open(a.out, "w"), indent=1)

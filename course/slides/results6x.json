@@ -1,56 +1,70 @@
 {
  "sprint_0.3": {
   "n": 64,
-  "fin": 6,
-  "past": 11,
-  "t_med": 159.8,
-  "t_min": 78.5,
-  "falls_med": 20
+  "fin": 25,
+  "past": 29,
+  "t_med": 129.5,
+  "t_min": 64.4,
+  "falls_med": 13,
+  "per_run": [
+   9,
+   4,
+   5,
+   7
+  ]
  },
  "sprint_0.6": {
   "n": 64,
-  "fin": 22,
-  "past": 26,
-  "t_med": 144.4,
-  "t_min": 75.3,
-  "falls_med": 44
+  "fin": 52,
+  "past": 56,
+  "t_med": 103.9,
+  "t_min": 53.1,
+  "falls_med": 9,
+  "per_run": [
+   14,
+   13,
+   13,
+   12
+  ]
  },
  "sprint_0.45": {
   "n": 16,
-  "fin": 1
+  "fin": 10
  },
  "sprint_0.75": {
   "n": 16,
-  "fin": 4
+  "fin": 14
  },
  "sprint_0.9": {
   "n": 16,
-  "fin": 5
+  "fin": 15
  },
  "adv10_none": {
   "n": 16,
-  "fin": 14,
-  "t_med": 115.0
+  "fin": 0,
+  "t_med": null,
+  "end_x_med": 3.97
  },
  "adv10_0.6": {
   "n": 16,
-  "fin": 14,
-  "t_med": 73.0
+  "fin": 15,
+  "t_med": 54.4,
+  "end_x_med": 7.35
  },
  "delivery": {
   "newton_walk_2000@0": {
    "ok": 12,
    "n": 12,
    "fell": 0,
-   "t_med": 15.2,
+   "t_med": 15.1,
    "J_m": 19.0
   },
   "newton_walk_2000@100": {
    "ok": 12,
    "n": 12,
    "fell": 0,
-   "t_med": 16.3,
-   "J_m": 18.4
+   "t_med": 16.4,
+   "J_m": 18.5
   },
   "newton_walk_2000@200": {
    "ok": 12,
@@ -74,72 +88,72 @@
    "J_m": null
   },
   "rough_ft@0": {
-   "ok": 8,
+   "ok": 12,
    "n": 12,
-   "fell": 4,
-   "t_med": 30.3,
-   "J_m": 15.1
+   "fell": 0,
+   "t_med": 31.6,
+   "J_m": 18.2
   },
   "rough_ft@100": {
    "ok": 12,
    "n": 12,
    "fell": 0,
-   "t_med": 51.4,
-   "J_m": 13.1
+   "t_med": 32.6,
+   "J_m": 19.3
   },
   "rough_ft@200": {
    "ok": 12,
    "n": 12,
    "fell": 0,
-   "t_med": 49.0,
-   "J_m": 12.8
+   "t_med": 34.4,
+   "J_m": 20.0
   },
   "rough_ft@300": {
    "ok": 12,
    "n": 12,
    "fell": 0,
-   "t_med": 47.0,
-   "J_m": 12.1
+   "t_med": 33.9,
+   "J_m": 18.3
   },
   "rough_ft@400": {
    "ok": 12,
    "n": 12,
    "fell": 0,
-   "t_med": 48.9,
-   "J_m": 12.4
+   "t_med": 39.8,
+   "J_m": 21.2
   },
   "velstand@0": {
-   "ok": 7,
+   "ok": 12,
    "n": 12,
-   "fell": 5,
-   "t_med": 78.2,
-   "J_m": 23.3
+   "fell": 0,
+   "t_med": 50.6,
+   "J_m": 29.2
   },
   "velstand@100": {
    "ok": 12,
    "n": 12,
    "fell": 0,
-   "t_med": 70.1,
-   "J_m": 15.6
+   "t_med": 47.2,
+   "J_m": 23.8
   },
   "velstand@200": {
-   "ok": 11,
+   "ok": 12,
    "n": 12,
-   "fell": 1,
-   "t_med": 62.8,
-   "J_m": 13.7
+   "fell": 0,
+   "t_med": 46.7,
+   "J_m": 21.3
   },
   "velstand@300": {
-   "ok": 6,
+   "ok": 12,
    "n": 12,
-   "fell": 6,
-   "t_med": 63.8,
-   "J_m": 13.1
+   "fell": 0,
+   "t_med": 72.3,
+   "J_m": 29.1
   },
   "velstand@400": {
    "ok": 0,
    "n": 12,
-   "fell": 12,
+   "fell": 0,
    "t_med": null,
    "J_m": null
   }
@@ -324,7 +338,7 @@
   "N": 1008,
   "reps": 21,
   "sim_s": 20,
-  "wall_s": 7.6,
+  "wall_s": 7.5,
   "policies": [
    "walk_2000",
    "rough_ft",
@@ -348,444 +362,979 @@
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 2.02
+    "dist_med": 2.36,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
    "walk_2000|box": {
-    "pass_": 0,
+    "pass_": 21,
     "n": 21,
-    "fell": 21,
-    "dist_med": null
+    "fell": 0,
+    "dist_med": 3.32,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
    "walk_2000|push05": {
-    "pass_": 0,
+    "pass_": 19,
     "n": 21,
-    "fell": 21,
-    "dist_med": null
+    "fell": 2,
+    "dist_med": 2.32,
+    "t_fall": [
+     5.72,
+     10.66
+    ],
+    "up_end": 19,
+    "min_up": -1.0,
+    "min_z": 0.035
    },
    "walk_2000|push10": {
     "pass_": 0,
     "n": 21,
     "fell": 21,
-    "dist_med": null
+    "dist_med": null,
+    "t_fall": [
+     5.24,
+     5.28,
+     5.28,
+     5.3,
+     5.3,
+     5.32,
+     5.32,
+     5.34,
+     5.34,
+     5.34,
+     5.38,
+     5.4,
+     5.42,
+     5.42,
+     5.52,
+     5.92,
+     10.34,
+     10.4,
+     10.44,
+     10.5,
+     15.38
+    ],
+    "up_end": 1,
+    "min_up": -1.0,
+    "min_z": 0.033
    },
    "walk_2000|ice": {
-    "pass_": 21,
+    "pass_": 14,
     "n": 21,
-    "fell": 0,
-    "dist_med": 1.92
+    "fell": 5,
+    "dist_med": 1.68,
+    "t_fall": [
+     4.18,
+     4.54,
+     4.8,
+     5.9,
+     9.62
+    ],
+    "up_end": 16,
+    "min_up": -0.96,
+    "min_z": 0.034
    },
    "walk_2000|weak": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 2.02
+    "dist_med": 2.35,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
    "walk_2000|heavy": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.98
+    "dist_med": 2.3,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.114
    },
    "walk_2000|imu": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.9
+    "dist_med": 2.62,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.99,
+    "min_z": 0.114
    },
    "rough_ft|nominal": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.71
+    "dist_med": 2.6,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
    "rough_ft|box": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 6.29
+    "dist_med": 2.44,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.114
    },
    "rough_ft|push05": {
-    "pass_": 17,
+    "pass_": 20,
     "n": 21,
-    "fell": 2,
-    "dist_med": 2.21
+    "fell": 1,
+    "dist_med": 2.34,
+    "t_fall": [
+     10.66
+    ],
+    "up_end": 20,
+    "min_up": -0.52,
+    "min_z": 0.037
    },
    "rough_ft|push10": {
-    "pass_": 0,
+    "pass_": 1,
     "n": 21,
-    "fell": 21,
-    "dist_med": null
+    "fell": 20,
+    "dist_med": 1.63,
+    "t_fall": [
+     5.28,
+     5.28,
+     5.28,
+     5.3,
+     5.3,
+     5.3,
+     5.36,
+     5.38,
+     5.38,
+     5.44,
+     5.5,
+     5.84,
+     10.36,
+     10.38,
+     10.42,
+     10.46,
+     10.5,
+     15.34,
+     15.4,
+     15.44
+    ],
+    "up_end": 1,
+    "min_up": -1.0,
+    "min_z": 0.03
    },
    "rough_ft|ice": {
-    "pass_": 4,
+    "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.42
+    "dist_med": 2.12,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.113
    },
    "rough_ft|weak": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.71
+    "dist_med": 2.6,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
    "rough_ft|heavy": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.77
+    "dist_med": 2.62,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
    "rough_ft|imu": {
-    "pass_": 20,
+    "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.61
+    "dist_med": 2.47,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.99,
+    "min_z": 0.114
    },
    "velstand|nominal": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.62
+    "dist_med": 2.31,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.112
    },
    "velstand|box": {
-    "pass_": 0,
+    "pass_": 2,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.16
+    "dist_med": 1.38,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.112
    },
    "velstand|push05": {
-    "pass_": 0,
+    "pass_": 18,
     "n": 21,
-    "fell": 20,
-    "dist_med": 1.19
+    "fell": 2,
+    "dist_med": 2.08,
+    "t_fall": [
+     5.6,
+     5.78
+    ],
+    "up_end": 21,
+    "min_up": -0.35,
+    "min_z": 0.038
    },
    "velstand|push10": {
-    "pass_": 0,
+    "pass_": 5,
     "n": 21,
-    "fell": 21,
-    "dist_med": null
+    "fell": 15,
+    "dist_med": 2.67,
+    "t_fall": [
+     5.28,
+     5.38,
+     5.44,
+     5.56,
+     5.68,
+     5.68,
+     5.8,
+     10.24,
+     10.28,
+     10.34,
+     10.36,
+     10.36,
+     15.22,
+     15.38,
+     15.5
+    ],
+    "up_end": 21,
+    "min_up": -0.48,
+    "min_z": 0.035
    },
    "velstand|ice": {
-    "pass_": 4,
+    "pass_": 20,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.49
+    "dist_med": 2.06,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.111
    },
    "velstand|weak": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.62
+    "dist_med": 2.31,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.112
    },
    "velstand|heavy": {
-    "pass_": 0,
+    "pass_": 2,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.21
+    "dist_med": 1.47,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.11
    },
    "velstand|imu": {
-    "pass_": 0,
+    "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.44
+    "dist_med": 1.97,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.99,
+    "min_z": 0.111
    },
    "climb35|nominal": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.68
+    "dist_med": 1.96,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
    "climb35|box": {
-    "pass_": 0,
+    "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.24
+    "dist_med": 2.08,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.114
    },
    "climb35|push05": {
-    "pass_": 0,
+    "pass_": 20,
     "n": 21,
-    "fell": 20,
-    "dist_med": 1.39
+    "fell": 1,
+    "dist_med": 1.91,
+    "t_fall": [
+     10.56
+    ],
+    "up_end": 20,
+    "min_up": -0.26,
+    "min_z": 0.035
    },
    "climb35|push10": {
-    "pass_": 0,
+    "pass_": 3,
     "n": 21,
-    "fell": 21,
-    "dist_med": null
+    "fell": 18,
+    "dist_med": 2.21,
+    "t_fall": [
+     5.26,
+     5.26,
+     5.28,
+     5.28,
+     5.32,
+     5.34,
+     5.44,
+     10.26,
+     10.28,
+     10.38,
+     10.38,
+     10.5,
+     10.56,
+     15.3,
+     15.3,
+     15.3,
+     15.32,
+     15.32
+    ],
+    "up_end": 3,
+    "min_up": -0.92,
+    "min_z": 0.034
    },
    "climb35|ice": {
-    "pass_": 0,
+    "pass_": 20,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.33
+    "dist_med": 2.09,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.113
    },
    "climb35|weak": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.68
+    "dist_med": 1.95,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
    "climb35|heavy": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.68
+    "dist_med": 2.2,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.114
    },
    "climb35|imu": {
-    "pass_": 2,
+    "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 1.45
+    "dist_med": 2.06,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.99,
+    "min_z": 0.114
    },
    "newton_walk_2000|nominal": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 5.69
+    "dist_med": 5.69,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.11
    },
    "newton_walk_2000|box": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 5.5
+    "dist_med": 5.51,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.99,
+    "min_z": 0.109
    },
    "newton_walk_2000|push05": {
-    "pass_": 16,
+    "pass_": 17,
     "n": 21,
-    "fell": 5,
-    "dist_med": 5.41
+    "fell": 4,
+    "dist_med": 5.41,
+    "t_fall": [
+     10.68,
+     15.36,
+     15.48,
+     15.6
+    ],
+    "up_end": 17,
+    "min_up": -0.24,
+    "min_z": 0.038
    },
    "newton_walk_2000|push10": {
     "pass_": 0,
     "n": 21,
     "fell": 21,
-    "dist_med": null
+    "dist_med": null,
+    "t_fall": [
+     5.24,
+     5.26,
+     5.28,
+     5.3,
+     5.3,
+     5.3,
+     5.3,
+     5.3,
+     5.3,
+     5.32,
+     5.34,
+     5.34,
+     5.34,
+     5.34,
+     5.34,
+     5.36,
+     5.36,
+     5.36,
+     5.38,
+     5.42,
+     5.46
+    ],
+    "up_end": 0,
+    "min_up": -0.34,
+    "min_z": 0.035
    },
    "newton_walk_2000|ice": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 4.54
+    "dist_med": 4.52,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.98,
+    "min_z": 0.11
    },
    "newton_walk_2000|weak": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 5.71
+    "dist_med": 5.71,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 1.0,
+    "min_z": 0.11
    },
    "newton_walk_2000|heavy": {
     "pass_": 5,
     "n": 21,
     "fell": 16,
-    "dist_med": 3.4
+    "dist_med": 3.37,
+    "t_fall": [
+     1.04,
+     1.06,
+     1.08,
+     1.1,
+     1.14,
+     1.2,
+     1.22,
+     1.26,
+     1.3,
+     1.48,
+     1.48,
+     1.48,
+     1.5,
+     1.6,
+     1.82,
+     2.06
+    ],
+    "up_end": 5,
+    "min_up": -0.3,
+    "min_z": 0.039
    },
    "newton_walk_2000|imu": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 5.6
+    "dist_med": 5.61,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.99,
+    "min_z": 0.11
    },
    "newton_latency_2000|nominal": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 5.46
+    "dist_med": 5.45,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.99,
+    "min_z": 0.111
    },
    "newton_latency_2000|box": {
-    "pass_": 0,
+    "pass_": 1,
     "n": 21,
     "fell": 0,
-    "dist_med": 0.83
+    "dist_med": 0.93,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.97,
+    "min_z": 0.107
    },
    "newton_latency_2000|push05": {
-    "pass_": 6,
+    "pass_": 5,
     "n": 21,
-    "fell": 15,
-    "dist_med": 6.01
+    "fell": 16,
+    "dist_med": 6.09,
+    "t_fall": [
+     5.48,
+     5.48,
+     5.54,
+     5.62,
+     5.68,
+     5.82,
+     10.56,
+     10.58,
+     10.58,
+     10.62,
+     10.84,
+     10.86,
+     11.1,
+     15.54,
+     15.62,
+     15.74
+    ],
+    "up_end": 5,
+    "min_up": -0.25,
+    "min_z": 0.029
    },
    "newton_latency_2000|push10": {
     "pass_": 0,
     "n": 21,
     "fell": 21,
-    "dist_med": null
+    "dist_med": null,
+    "t_fall": [
+     5.24,
+     5.24,
+     5.24,
+     5.24,
+     5.24,
+     5.26,
+     5.26,
+     5.26,
+     5.28,
+     5.28,
+     5.28,
+     5.28,
+     5.3,
+     5.3,
+     5.3,
+     5.3,
+     5.32,
+     5.34,
+     5.36,
+     5.36,
+     5.44
+    ],
+    "up_end": 0,
+    "min_up": -0.29,
+    "min_z": 0.03
    },
    "newton_latency_2000|ice": {
     "pass_": 0,
     "n": 21,
     "fell": 0,
-    "dist_med": 0.58
+    "dist_med": 0.49,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.99,
+    "min_z": 0.11
    },
    "newton_latency_2000|weak": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 6.54
+    "dist_med": 6.52,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.98,
+    "min_z": 0.111
    },
    "newton_latency_2000|heavy": {
     "pass_": 0,
     "n": 21,
     "fell": 21,
-    "dist_med": null
+    "dist_med": null,
+    "t_fall": [
+     0.96,
+     1.0,
+     1.0,
+     1.02,
+     1.02,
+     1.02,
+     1.02,
+     1.06,
+     1.06,
+     1.08,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.12,
+     1.14,
+     1.16,
+     1.16,
+     1.18,
+     1.18,
+     1.22
+    ],
+    "up_end": 0,
+    "min_up": -0.11,
+    "min_z": 0.049
    },
    "newton_latency_2000|imu": {
     "pass_": 21,
     "n": 21,
     "fell": 0,
-    "dist_med": 6.38
+    "dist_med": 6.32,
+    "t_fall": [],
+    "up_end": 21,
+    "min_up": 0.97,
+    "min_z": 0.108
    }
   }
  },
  "floor": {
-  "box_nominal": {
+  "plane": {
    "walk_2000|nominal": {
-    "pass_": 0,
+    "pass_": 16,
     "n": 16,
-    "fell": 16,
-    "dist_med": null
+    "fell": 0,
+    "dist_med": 2.36,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.115
+   },
+   "walk_2000|heavy": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 2.3,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.114
    },
    "rough_ft|nominal": {
     "pass_": 16,
     "n": 16,
     "fell": 0,
-    "dist_med": 6.57
+    "dist_med": 2.6,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
-   "velstand|nominal": {
-    "pass_": 0,
-    "n": 16,
-    "fell": 0,
-    "dist_med": 1.17
-   },
-   "climb35|nominal": {
-    "pass_": 0,
-    "n": 16,
-    "fell": 0,
-    "dist_med": 1.28
-   },
-   "newton_walk_2000|nominal": {
+   "rough_ft|heavy": {
     "pass_": 16,
     "n": 16,
     "fell": 0,
-    "dist_med": 5.49
-   },
-   "newton_latency_2000|nominal": {
-    "pass_": 1,
-    "n": 16,
-    "fell": 0,
-    "dist_med": 0.91
-   }
-  },
-  "plane_nominal": {
-   "walk_2000|nominal": {
-    "pass_": 16,
-    "n": 16,
-    "fell": 0,
-    "dist_med": 2.02
-   },
-   "rough_ft|nominal": {
-    "pass_": 16,
-    "n": 16,
-    "fell": 0,
-    "dist_med": 1.71
+    "dist_med": 2.62,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
    "velstand|nominal": {
     "pass_": 16,
     "n": 16,
     "fell": 0,
-    "dist_med": 1.62
+    "dist_med": 2.31,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.112
+   },
+   "velstand|heavy": {
+    "pass_": 0,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.47,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.109
    },
    "climb35|nominal": {
     "pass_": 16,
     "n": 16,
     "fell": 0,
-    "dist_med": 1.68
+    "dist_med": 1.96,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.115
    },
-   "newton_walk_2000|nominal": {
+   "climb35|heavy": {
     "pass_": 16,
     "n": 16,
     "fell": 0,
-    "dist_med": 5.69
+    "dist_med": 2.19,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.114
    },
-   "newton_latency_2000|nominal": {
-    "pass_": 16,
-    "n": 16,
-    "fell": 0,
-    "dist_med": 5.46
-   }
-  },
-  "plane_heavy": {
    "newton_walk_2000|nominal": {
     "pass_": 16,
     "n": 16,
     "fell": 0,
     "dist_med": 5.69,
-    "t_fall": []
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.11
    },
    "newton_walk_2000|heavy": {
     "pass_": 7,
     "n": 16,
     "fell": 9,
-    "dist_med": 3.33,
+    "dist_med": 3.34,
     "t_fall": [
+     1.02,
+     1.04,
      1.06,
      1.1,
+     1.22,
+     1.5,
+     1.6,
+     1.62,
+     1.88
+    ],
+    "up_end": 7,
+    "min_up": -0.3,
+    "min_z": 0.037
+   },
+   "newton_latency_2000|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 5.47,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 0.99,
+    "min_z": 0.111
+   },
+   "newton_latency_2000|heavy": {
+    "pass_": 0,
+    "n": 16,
+    "fell": 16,
+    "dist_med": null,
+    "t_fall": [
+     0.96,
+     1.02,
+     1.04,
+     1.06,
+     1.06,
+     1.08,
+     1.08,
      1.1,
+     1.1,
+     1.12,
      1.14,
-     1.18,
-     1.26,
-     1.3,
-     1.94,
-     2.62
-    ]
+     1.14,
+     1.16,
+     1.16,
+     1.2,
+     1.2
+    ],
+    "up_end": 0,
+    "min_up": -0.16,
+    "min_z": 0.05
+   }
+  },
+  "box": {
+   "walk_2000|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 3.3,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.115
+   },
+   "walk_2000|heavy": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 2.08,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.113
    },
    "rough_ft|nominal": {
     "pass_": 16,
     "n": 16,
     "fell": 0,
-    "dist_med": 1.71,
-    "t_fall": []
+    "dist_med": 2.43,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.114
    },
    "rough_ft|heavy": {
+    "pass_": 2,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.01,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.113
+   },
+   "velstand|nominal": {
+    "pass_": 1,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.37,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.112
+   },
+   "velstand|heavy": {
     "pass_": 16,
     "n": 16,
     "fell": 0,
     "dist_med": 1.77,
-    "t_fall": []
-   }
-  },
-  "box_heavy": {
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.11
+   },
+   "climb35|nominal": {
+    "pass_": 16,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 2.08,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.114
+   },
+   "climb35|heavy": {
+    "pass_": 1,
+    "n": 16,
+    "fell": 0,
+    "dist_med": 1.32,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 1.0,
+    "min_z": 0.113
+   },
    "newton_walk_2000|nominal": {
     "pass_": 16,
     "n": 16,
     "fell": 0,
-    "dist_med": 5.48,
-    "t_fall": []
+    "dist_med": 5.46,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 0.99,
+    "min_z": 0.109
    },
    "newton_walk_2000|heavy": {
     "pass_": 16,
     "n": 16,
     "fell": 0,
-    "dist_med": 3.38,
-    "t_fall": []
+    "dist_med": 3.34,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 0.97,
+    "min_z": 0.11
    },
-   "rough_ft|nominal": {
-    "pass_": 16,
+   "newton_latency_2000|nominal": {
+    "pass_": 1,
     "n": 16,
     "fell": 0,
-    "dist_med": 6.36,
-    "t_fall": []
+    "dist_med": 0.97,
+    "t_fall": [],
+    "up_end": 16,
+    "min_up": 0.97,
+    "min_z": 0.107
    },
-   "rough_ft|heavy": {
-    "pass_": 0,
+   "newton_latency_2000|heavy": {
+    "pass_": 1,
     "n": 16,
-    "fell": 1,
-    "dist_med": 1.17,
+    "fell": 15,
+    "dist_med": 4.46,
     "t_fall": [
-     4.54
-    ]
+     1.08,
+     1.08,
+     1.14,
+     1.16,
+     1.22,
+     1.22,
+     1.26,
+     1.26,
+     1.28,
+     1.3,
+     1.34,
+     1.38,
+     1.42,
+     1.62,
+     1.64
+    ],
+    "up_end": 1,
+    "min_up": -0.08,
+    "min_z": 0.049
    }
   }
  },
  "push_cpu": {
   "bam": "4/4",
   "pd": "3/3"
+ },
+ "push_cpu_track": {
+  "fell": 6,
+  "n": 6,
+  "up_end": 6
  }
 }
